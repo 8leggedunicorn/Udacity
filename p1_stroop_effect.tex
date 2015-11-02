@@ -6,9 +6,10 @@
     \usepackage{geometry} % Used to adjust the document margins
     \usepackage{amsmath} % Equations
     \usepackage{amssymb} % Equations
-    \usepackage{eurosym} % defines \euro
-    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
-    \usepackage[utf8x]{inputenc} % Allow utf-8 characters in the tex document
+    %\usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage[T1]{fontenc}
+    \usepackage{newtxtext,newtxmath}
+    \usepackage[utf8]{inputenc} % Allow utf-8 characters in the tex document
     \usepackage{fancyvrb} % verbatim replacement that allows latex
     \usepackage{grffile} % extends the file name processing of package graphics 
                          % to support a larger range 
@@ -16,11 +17,22 @@
     % internal navigation ('pdf bookmarks' for the table of contents,
     % internal cross-reference links, web links for URLs, etc.)
     \usepackage{tikz}
+    \usepackage{pgfplots}
+    \pgfplotsset{compat=newest}
     \usepackage{hyperref}
     \usepackage{url}
     \usepackage{longtable} % longtable support required by pandoc >1.10
     \usepackage{booktabs}  % table support for pandoc > 1.12.2
     \usepackage{ulem} % ulem is needed to support strikethroughs (\sout)
+    \usepackage[
+      autocite=inline, 
+      backend=biber,
+      labeldate=true, 
+      refsegment=section,
+      uniquename=full,
+    uniquelist=true]
+    {biblatex}
+    \addbibresource{udacity.bib}
     \definecolor{orange}{cmyk}{0,0.4,0.8,0.2}
     \definecolor{darkorange}{rgb}{.71,0.21,0.01}
     \definecolor{darkgreen}{rgb}{.12,.54,.11}
@@ -226,10 +238,7 @@
     \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
 
 \begin{document}
-    
-    
 \maketitle
-
 \section*{Introduction}
 So the stage is set with the following description for the Stroop experiment:
 \begin{quote}
@@ -247,123 +256,90 @@ participant will go through and record a time from each condition.
 \cite{Udacity-P1-Stroop}
 \end{quote}
 \section{What is our independent variable? What is our dependent
-variable?}\label{what-is-our-independent-variable-what-is-our-dependent-variable}
+variable?}
+\label{sec:question1}
+The independent variable is a binary condition that of either congruency or
+incongruency between the color of a word, and the symantic meaning of the word.
+As example the word `RED' is a congruent example where the word `red' has the
+color of its symantic meaning, i.e.~the color it represents, and `BLUE' is an
+incongruent case where the word `blue' which has the symantic meaning of the
+color blue is instead the color green. Frome here on out the terms congruent
+color selection, CCS, and incongruent color selection, ICS, will be used to
+denote the two conditions the dependent variable may take that of a word
+representing a color being colored with or with a different color respectively.
 
-    The independent variable is a binary condition that of either congruency
-or incongruency between the color of a word, and the symantic meaning of
-the word. As example the word `RED' is a congruent example where the
-word `red' has the color of its symantic meaning, i.e.~the color it
-represents, and `BLUE' is an incongruent case where the word `blue'
-which has the symantic meaning of the color blue is instead the color
-green. Frome here on out the terms congruent color selection, CCS, and
-incongruent color selection, ICS, will be used to denote the two
-conditions the dependent variable may take that of a word representing a
-color being colored with or with a different color respectively.
+The dependent variable is the time, in seconds, it takes to read through an
+equal sized lists of CCS or ICS words.  
 
-The dependent variable is the time, in seconds, it takes to read through
-an equal sized lists of CCS or ICS words.
-
-    \section{What is an appropriate set of hypotheses for this task? What
-kind of statistical test do you expect to perform? Justify your
-choices.}\label{what-is-an-appropriate-set-of-hypotheses-for-this-task-what-kind-of-statistical-test-do-you-expect-to-perform-justify-your-choices.}
-
-    The null hypothesis, \(H_0\) is the statement that the ICS task will
-take less or an equal amount of time to the CCS task. The alternative
-hypothesis, \(H_A\) is the statement that the mean population time to
-read an ICS list will be greater than an equally sized CCS list. The
-null and alternative hypothesis choice stems from a need to test
-quantatively the validity and extent of an already well respected
-phenomenon the Stroop effect. The Stroop effect being defined to mean
-that cognitive incongruences will lead to an increase in the reaction
-time of a task.\\ It is true that this single tailed objective may not
-provide insight if indeed the reaction time for ICS word lists take, on
-the average, less time to complete, however this is a test regarding the
-scope and veracity of the Stroop effect which has been shown in many
-previous quantative tests to have general validity. If indeed the ICS
-task takes less time it is enough that \(H_0\) should be kept to cause
-doubt regarding the validity of either the test or the Stroop effect.
-That is due to the large body of work already done to test the effect if
-\(H_0\) is kept there is either something wrong with the experiment or
-the Stroop effect has either more limitations on generalizability than
-expected or there are indeed real issues with it's veracity. So to sum
-things up via a set of equations:
+\section{What is an appropriate set of hypotheses for this task? What kind of
+statistical test do you expect to perform? Justify your choices.}
+\label{sec:question2}
+The null hypothesis, \(H_0\) is the statement that the ICS task will take less
+or an equal amount of time to the CCS task. The alternative hypothesis, \(H_A\)
+is the statement that the mean population time to read an ICS list will be
+greater than an equally sized CCS list. The null and alternative hypothesis
+choice stems from a need to test quantatively the validity and extent of an
+already well respected phenomenon the Stroop effect. The Stroop effect being
+defined to mean that cognitive incongruences will lead to an increase in the
+reaction time of a task.\\ It is true that this single tailed objective may not
+provide insight if indeed the reaction time for ICS word lists take, on the
+average, less time to complete, however this is a test regarding the scope and
+veracity of the Stroop effect which has been shown in many previous quantative
+tests to have general validity. If indeed the ICS task takes less time it is
+enough that \(H_0\) should be kept to cause doubt regarding the validity of
+either the test or the Stroop effect.  That is due to the large body of work
+already done to test the effect if \(H_0\) is kept there is either something
+wrong with the experiment or the Stroop effect has either more limitations on
+generalizability than expected or there are indeed real issues with it's
+veracity. So to sum things up via a set of equations:
 
 \begin{align}
-H_0:\; \mu_{ICS} &&\le&& \mu_{CCS} \\
-H_A:\; \mu_{ICS} &&>&& \mu_{CCS}
+H_0:\; \mu_{ICS} \le \mu_{CCS} \\
+H_A:\; \mu_{ICS} > \mu_{CCS}
 \end{align}
+As the two sets of data are correlated, the same subjects are used to take both
+the ICS and CCS tests, the proper test to use is a dependent t-test for paired
+samples.  Given the hypothesis devised above the single tail test will be used.
 
-    \section{Report some descriptive statistics regarding this dataset.
-Include at least one measure of central tendency and at least one
-measure of
-variability.}\label{report-some-descriptive-statistics-regarding-this-dataset.-include-at-least-one-measure-of-central-tendency-and-at-least-one-measure-of-variability.}
-
-    Below I've printed the mean, sample standard deviation, minimum values,
+\section{Report some descriptive statistics regarding this dataset.  Include at
+least one measure of central tendency and at least one measure of variability.}
+\label{sec:question3}
+  Below I've printed the mean, sample standard deviation, minimum values,
 25th, 50th, 75th percentiles, maximums, and the median for both the CCS
-and ICS samples, all values are in seconds. For central tendency I've
-included both the mean, and the median - which in this case is simply
-the 50th percentile. Notice the fact that for both CCS and ICS the
-median and mean are nearly identical, for the CCS case it's less than
-one third of a second difference, and for the ICS case the difference
-between these two measure of central tendency is only slightly greater
-than a second. This points to both distribution being evenly distributed
-around the mean. As we can see for nearly all percentiles, minimum and
-maximum, and mean values the CCS times are roughly two thirds of the
-value of the ICS times, and all times for every category are
-significantly longer for the ICS sample relative to the CCS.
+and ICS samples, all values are in seconds. 
+\begin{center}
+  \input{data_describe}
+\end{center}
+To measure the central tendency consider the mean, and the median - which in this
+case is simply the 50th percentile. Notice the fact that for both CCS and ICS
+the median and mean are nearly identical, for the CCS case it's less than one
+third of a second difference, and for the ICS case the difference between these
+two measure of central tendency is only slightly greater than a second. This
+points to both distribution being evenly distributed around the mean. As we can
+see for nearly all percentiles, minimum and maximum, and mean values the CCS
+times are roughly two thirds of the value of the ICS times, and all times for
+every category are significantly longer for the ICS sample relative to the CCS.
 
-An indication of the relative spread can be observed by looking at the
-sample standard deviations. the ICS case is slightly more spread out
-than the CCS case \(4.797s\) to \(3.559s\) respectively, i.e slightly
-over a second more for the ICS sample. To gain a better descriptive
-understanding of the spread we can also look at the range, i.e.
-\(R = x_{max} - x_{min}\) of the two samples:
+An indication of the relative spread can be observed by looking at the sample
+standard deviations. the ICS case is slightly more spread out than the CCS case
+\(4.797s\) to \(3.559s\) respectively, i.e slightly over a second more for the
+ICS sample. To gain a better descriptive understanding of the spread we can also
+look at the range, i.e.  \(R = x_{max} - x_{min}\) of the two samples:
 
-\begin{align}
-R_{CCS} &= 22.328000 - 8.630000 & = 13.698\\
-R_{ICS} &= 35.255000 - 15.687000 & = 19.568
-\end{align}
+\begin{align*}
+R_{CCS} = x_{CCS,max} - x_{CCS,min} = 22.328000 - 8.630000 = 13.698\\
+R_{ICS} = x_{ICS,max} - x_{ICS,min} = 35.255000 - 15.687000 = 19.568
+\end{align*}
 
-From both the sample standard deviation and the range we can see that
-the spread of the ICS sample is greater both in terms of the range,
-i.e.~outliers, and of the sample standard deviation:
+From both the sample standard deviation and the range we can see that the spread
+of the ICS sample is greater both in terms of the range, i.e.~outliers, and of
+the sample standard deviation:
 
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}2}]:} \PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
-        \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
-        \PY{n}{stroopdata} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{stroopdata.csv}\PY{l+s}{\PYZsq{}}\PY{p}{)}
-        \PY{n}{stroopdata}\PY{o}{.}\PY{n}{describe}\PY{p}{(}\PY{p}{)}
-\end{Verbatim}
-
-            \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}2}]:}        Congruent  Incongruent
-        count  24.000000    24.000000
-        mean   14.051125    22.015917
-        std     3.559358     4.797057
-        min     8.630000    15.687000
-        25\%    11.895250    18.716750
-        50\%    14.356500    21.017500
-        75\%    16.200750    24.051500
-        max    22.328000    35.255000
-\end{Verbatim}
-        
-    and a simple calculation of the range for the CCS and ICS samples:
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}3}]:} \PY{n+nb}{print}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s}{The range for the two cases:}\PY{l+s+se}{\PYZbs{}n}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{n}{stroopdata}\PY{o}{.}\PY{n}{max}\PY{p}{(}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{n}{stroopdata}\PY{o}{.}\PY{n}{min}\PY{p}{(}\PY{p}{)}\PY{p}{)}
-\end{Verbatim}
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-The range for the two cases:
- Congruent      13.698
-Incongruent    19.568
-dtype: float64
-    \end{Verbatim}
-
-    \section{Provide one or two visualizations that show the distribution of
+\section{Provide one or two visualizations that show the distribution of
 the sample data. Write one or two sentences noting what you observe
 about the plot or
-plots.}\label{provide-one-or-two-visualizations-that-show-the-distribution-of-the-sample-data.-write-one-or-two-sentences-noting-what-you-observe-about-the-plot-or-plots.}
+plots.}
+\label{question4}
 
     
 
@@ -406,12 +382,12 @@ plots.}\label{provide-one-or-two-visualizations-that-show-the-distribution-of-th
          \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
 
+%\input{bar_graph_test.tex}
     \begin{Verbatim}[commandchars=\\\{\}]
 Populating the interactive namespace from numpy and matplotlib
     \end{Verbatim}
-
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{Stroop Effect_files/Stroop Effect_13_1.png}
+      \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{bar_graph.pdf}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -627,6 +603,5 @@ ImportError: No module named 'notebook'
 %Description}.
 %\href{http://web.archive.org/web/20080207010024/http://www.808multimedia.com/winnt/kernel.htm}{URL}
 
-\bibliographystyle{unsrt}
-\bibliography{udacity}
+\printbibliography
 \end{document}
