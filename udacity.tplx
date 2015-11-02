@@ -1,0 +1,14 @@
+((*- extends 'article.tplx' -*))
+
+((* block author *))
+\author{Yigal Weinstein}
+((* endblock author *))
+
+((* block title *))
+\title{Exploring the Stroop Effect utilizing IPython}
+((* endblock title *))
+
+((* block bibliography *))
+\bibliographystyle{unsrt}
+\bibliography{udacity}
+((* endblock bibliography *))
