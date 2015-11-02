@@ -1,3 +1,7 @@
+## Only care about TeX, Python, and MarkDown files
+!*.tex
+!*.py
+!*.md
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
