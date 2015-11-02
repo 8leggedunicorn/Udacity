@@ -1,2 +1,0 @@
-11.169s congruent (color same to word)
-10.227 Incongruent (color different to word)
