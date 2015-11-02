@@ -1,0 +1,632 @@
+\documentclass{article}
+    \usepackage{graphicx} % Used to insert images
+    \usepackage{adjustbox} % Used to constrain images to a maximum size 
+    \usepackage{color} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage[utf8x]{inputenc} % Allow utf-8 characters in the tex document
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range 
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{tikz}
+    \usepackage{hyperref}
+    \usepackage{url}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage{ulem} % ulem is needed to support strikethroughs (\sout)
+    \definecolor{orange}{cmyk}{0,0.4,0.8,0.2}
+    \definecolor{darkorange}{rgb}{.71,0.21,0.01}
+    \definecolor{darkgreen}{rgb}{.12,.54,.11}
+    \definecolor{myteal}{rgb}{.26, .44, .56}
+    \definecolor{gray}{gray}{0.45}
+    \definecolor{lightgray}{gray}{.95}
+    \definecolor{mediumgray}{gray}{.8}
+    \definecolor{inputbackground}{rgb}{.95, .95, .85}
+    \definecolor{outputbackground}{rgb}{.95, .95, .95}
+    \definecolor{traceback}{rgb}{1, .95, .95}
+    % ansi colors
+    \definecolor{red}{rgb}{.6,0,0}
+    \definecolor{green}{rgb}{0,.65,0}
+    \definecolor{brown}{rgb}{0.6,0.6,0}
+    \definecolor{blue}{rgb}{0,.145,.698}
+    \definecolor{purple}{rgb}{.698,.145,.698}
+    \definecolor{cyan}{rgb}{0,.698,.698}
+    \definecolor{lightgray}{gray}{0.5}
+    
+    % bright ansi colors
+    \definecolor{darkgray}{gray}{0.25}
+    \definecolor{lightred}{rgb}{1.0,0.39,0.28}
+    \definecolor{lightgreen}{rgb}{0.48,0.99,0.0}
+    \definecolor{lightblue}{rgb}{0.53,0.81,0.92}
+    \definecolor{lightpurple}{rgb}{0.87,0.63,0.87}
+    \definecolor{lightcyan}{rgb}{0.5,1.0,0.83}
+    
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatability definitions
+    \def\gt{>}
+    \def\lt{<}
+    % Document parameters
+    
+\title{Exploring the Stroop Effect utilizing IPython}
+\author{Yigal Weinstein}
+
+    % Pygments definitions
+    
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % Exact colors from NB
+    \definecolor{incolor}{rgb}{0.0, 0.0, 0.5}
+    \definecolor{outcolor}{rgb}{0.545, 0.0, 0.0}
+
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Slightly bigger margins than the latex defaults
+ \hypersetup{pdfauthor={Yigal Weinstein},
+            pdftitle={Data Science Notebook},
+            pdfsubject={data science},
+            pdfkeywords={data science, statistics, probability, machine learning},
+            %pdfpagelayout={TwoPageLeft}, % Displays two pages, odd-numbered pages to the left 
+            pdfcreator={PdfLaTeX},
+            bookmarks={true},            %  A set of Acrobat bookmarks are written
+            colorlinks={true},           %  Colors the text of links and anchors. 
+            anchorcolor={black},         %  Color for anchor text.
+            filecolor={cyan},            %  Color for URLs which open local files.
+            menucolor={red},             %  Color for Acrobat menu items.
+            runcolor={blue},              %  Color for run links (launch annotations).        
+            linkcolor={red!50!black},
+            citecolor={blue!50!black},
+            urlcolor={blue!80!black}
+            breaklinks=true,  % so long urls are correctly broken across lines
+           }           
+ 
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+
+\begin{document}
+    
+    
+\maketitle
+
+\section*{Introduction}
+So the stage is set with the following description for the Stroop experiment:
+\begin{quote}
+In a Stroop task, participants are presented with a list of words, with
+each word displayed in a color of ink. The participant's task is to say
+out loud the color of the ink in which the word is printed. The task has
+two conditions: a congruent words condition, and an incongruent words
+condition. In the congruent words condition, the words being displayed
+are color words whose names match the colors in which they are printed:
+for example {\color{red} RED }, {\color{blue} BLUE }. In the incongruent words condition, the words
+displayed are color words whose names do not match the colors in which
+they are printed: for example { \color{yellow}PURPLE }, {\color{green} ORANGE }. In each case, we measure
+the time it takes to name the ink colors in equally-sized lists. Each
+participant will go through and record a time from each condition.
+\cite{Udacity-P1-Stroop}
+\end{quote}
+\section{What is our independent variable? What is our dependent
+variable?}\label{what-is-our-independent-variable-what-is-our-dependent-variable}
+
+    The independent variable is a binary condition that of either congruency
+or incongruency between the color of a word, and the symantic meaning of
+the word. As example the word `RED' is a congruent example where the
+word `red' has the color of its symantic meaning, i.e.~the color it
+represents, and `BLUE' is an incongruent case where the word `blue'
+which has the symantic meaning of the color blue is instead the color
+green. Frome here on out the terms congruent color selection, CCS, and
+incongruent color selection, ICS, will be used to denote the two
+conditions the dependent variable may take that of a word representing a
+color being colored with or with a different color respectively.
+
+The dependent variable is the time, in seconds, it takes to read through
+an equal sized lists of CCS or ICS words.
+
+    \section{What is an appropriate set of hypotheses for this task? What
+kind of statistical test do you expect to perform? Justify your
+choices.}\label{what-is-an-appropriate-set-of-hypotheses-for-this-task-what-kind-of-statistical-test-do-you-expect-to-perform-justify-your-choices.}
+
+    The null hypothesis, \(H_0\) is the statement that the ICS task will
+take less or an equal amount of time to the CCS task. The alternative
+hypothesis, \(H_A\) is the statement that the mean population time to
+read an ICS list will be greater than an equally sized CCS list. The
+null and alternative hypothesis choice stems from a need to test
+quantatively the validity and extent of an already well respected
+phenomenon the Stroop effect. The Stroop effect being defined to mean
+that cognitive incongruences will lead to an increase in the reaction
+time of a task.\\ It is true that this single tailed objective may not
+provide insight if indeed the reaction time for ICS word lists take, on
+the average, less time to complete, however this is a test regarding the
+scope and veracity of the Stroop effect which has been shown in many
+previous quantative tests to have general validity. If indeed the ICS
+task takes less time it is enough that \(H_0\) should be kept to cause
+doubt regarding the validity of either the test or the Stroop effect.
+That is due to the large body of work already done to test the effect if
+\(H_0\) is kept there is either something wrong with the experiment or
+the Stroop effect has either more limitations on generalizability than
+expected or there are indeed real issues with it's veracity. So to sum
+things up via a set of equations:
+
+\begin{align}
+H_0:\; \mu_{ICS} &&\le&& \mu_{CCS} \\
+H_A:\; \mu_{ICS} &&>&& \mu_{CCS}
+\end{align}
+
+    \section{Report some descriptive statistics regarding this dataset.
+Include at least one measure of central tendency and at least one
+measure of
+variability.}\label{report-some-descriptive-statistics-regarding-this-dataset.-include-at-least-one-measure-of-central-tendency-and-at-least-one-measure-of-variability.}
+
+    Below I've printed the mean, sample standard deviation, minimum values,
+25th, 50th, 75th percentiles, maximums, and the median for both the CCS
+and ICS samples, all values are in seconds. For central tendency I've
+included both the mean, and the median - which in this case is simply
+the 50th percentile. Notice the fact that for both CCS and ICS the
+median and mean are nearly identical, for the CCS case it's less than
+one third of a second difference, and for the ICS case the difference
+between these two measure of central tendency is only slightly greater
+than a second. This points to both distribution being evenly distributed
+around the mean. As we can see for nearly all percentiles, minimum and
+maximum, and mean values the CCS times are roughly two thirds of the
+value of the ICS times, and all times for every category are
+significantly longer for the ICS sample relative to the CCS.
+
+An indication of the relative spread can be observed by looking at the
+sample standard deviations. the ICS case is slightly more spread out
+than the CCS case \(4.797s\) to \(3.559s\) respectively, i.e slightly
+over a second more for the ICS sample. To gain a better descriptive
+understanding of the spread we can also look at the range, i.e.
+\(R = x_{max} - x_{min}\) of the two samples:
+
+\begin{align}
+R_{CCS} &= 22.328000 - 8.630000 & = 13.698\\
+R_{ICS} &= 35.255000 - 15.687000 & = 19.568
+\end{align}
+
+From both the sample standard deviation and the range we can see that
+the spread of the ICS sample is greater both in terms of the range,
+i.e.~outliers, and of the sample standard deviation:
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}2}]:} \PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
+        \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+        \PY{n}{stroopdata} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{stroopdata.csv}\PY{l+s}{\PYZsq{}}\PY{p}{)}
+        \PY{n}{stroopdata}\PY{o}{.}\PY{n}{describe}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+            \begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}2}]:}        Congruent  Incongruent
+        count  24.000000    24.000000
+        mean   14.051125    22.015917
+        std     3.559358     4.797057
+        min     8.630000    15.687000
+        25\%    11.895250    18.716750
+        50\%    14.356500    21.017500
+        75\%    16.200750    24.051500
+        max    22.328000    35.255000
+\end{Verbatim}
+        
+    and a simple calculation of the range for the CCS and ICS samples:
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}3}]:} \PY{n+nb}{print}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s}{The range for the two cases:}\PY{l+s+se}{\PYZbs{}n}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{n}{stroopdata}\PY{o}{.}\PY{n}{max}\PY{p}{(}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{n}{stroopdata}\PY{o}{.}\PY{n}{min}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+The range for the two cases:
+ Congruent      13.698
+Incongruent    19.568
+dtype: float64
+    \end{Verbatim}
+
+    \section{Provide one or two visualizations that show the distribution of
+the sample data. Write one or two sentences noting what you observe
+about the plot or
+plots.}\label{provide-one-or-two-visualizations-that-show-the-distribution-of-the-sample-data.-write-one-or-two-sentences-noting-what-you-observe-about-the-plot-or-plots.}
+
+    
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}17}]:} \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+         \PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+         
+         \PY{o}{\PYZpc{}}\PY{k}{pylab} inline
+         \PY{n}{pylab}\PY{o}{.}\PY{n}{rcParams}\PY{p}{[}\PY{l+s}{\PYZsq{}}\PY{l+s}{figure.figsize}\PY{l+s}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{p}{(}\PY{l+m+mf}{8.0}\PY{p}{,} \PY{l+m+mf}{7.0}\PY{p}{)}
+         
+         \PY{n}{fig}\PY{p}{,} \PY{n}{ax} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{p}{)}
+         
+         \PY{n}{index} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{n}{stroopdata}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+         \PY{n}{bar\PYZus{}width} \PY{o}{=} \PY{l+m+mf}{0.36}
+         
+         \PY{n}{opacity} \PY{o}{=} \PY{l+m+mf}{0.6}
+         
+         \PY{n}{rects1} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{bar}\PY{p}{(}\PY{n}{index}\PY{p}{,} \PY{n}{stroopdata}\PY{p}{[}\PY{l+s}{\PYZsq{}}\PY{l+s}{Congruent}\PY{l+s}{\PYZsq{}}\PY{p}{]}\PY{p}{,} 
+                          \PY{n}{bar\PYZus{}width}\PY{p}{,}
+                          \PY{n}{alpha}\PY{o}{=}\PY{n}{opacity}\PY{p}{,}
+                          \PY{n}{color}\PY{o}{=}\PY{l+s}{\PYZsq{}}\PY{l+s}{k}\PY{l+s}{\PYZsq{}}\PY{p}{,}
+                          \PY{n}{label}\PY{o}{=}\PY{l+s}{\PYZsq{}}\PY{l+s}{CCS Sample}\PY{l+s}{\PYZsq{}}\PY{p}{)}
+         
+         \PY{n}{rects2} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{bar}\PY{p}{(}\PY{n}{index} \PY{o}{+} \PY{n}{bar\PYZus{}width}\PY{p}{,} \PY{n}{stroopdata}\PY{p}{[}\PY{l+s}{\PYZsq{}}\PY{l+s}{Incongruent}\PY{l+s}{\PYZsq{}}\PY{p}{]}\PY{p}{,} 
+                          \PY{n}{bar\PYZus{}width}\PY{p}{,}
+                          \PY{n}{alpha}\PY{o}{=}\PY{n}{opacity}\PY{p}{,}
+                          \PY{n}{color}\PY{o}{=}\PY{l+s}{\PYZsq{}}\PY{l+s}{b}\PY{l+s}{\PYZsq{}}\PY{p}{,}
+                          \PY{n}{label}\PY{o}{=}\PY{l+s}{\PYZsq{}}\PY{l+s}{ICS Sample}\PY{l+s}{\PYZsq{}}\PY{p}{)}
+         
+         \PY{c}{\PYZsh{} add some text for labels, title and axes ticks}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{rc}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{text}\PY{l+s}{\PYZsq{}}\PY{p}{,} \PY{n}{usetex}\PY{o}{=}\PY{k}{True}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{rc}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{font}\PY{l+s}{\PYZsq{}}\PY{p}{,} \PY{n}{family}\PY{o}{=}\PY{l+s}{\PYZsq{}}\PY{l+s}{sans}\PY{l+s}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s}{r\PYZsq{}}\PY{l+s}{\PYZbs{}}\PY{l+s}{textbf\PYZob{}Subject Number\PYZcb{}}\PY{l+s}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s}{r\PYZsq{}}\PY{l+s}{\PYZbs{}}\PY{l+s}{textit\PYZob{}Time\PYZcb{} (s)}\PY{l+s}{\PYZsq{}}\PY{p}{,} \PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{16}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s}{r\PYZsq{}}\PY{l+s}{Scores for CCS and ICS}\PY{l+s}{\PYZsq{}}\PY{p}{,}\PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{16}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s}{\PYZsq{}}\PY{l+s}{gray}\PY{l+s}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{xticks}\PY{p}{(}\PY{n}{index} \PY{o}{+} \PY{n}{bar\PYZus{}width}\PY{p}{,} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{25}\PY{p}{)}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+         
+         \PY{n}{plt}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Populating the interactive namespace from numpy and matplotlib
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{Stroop Effect_files/Stroop Effect_13_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}12}]:} \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+         \PY{l+s+sd}{Demo of TeX rendering.}
+         
+         \PY{l+s+sd}{You can use TeX to render all of your matplotlib text if the rc}
+         \PY{l+s+sd}{parameter text.usetex is set.  This works currently on the agg and ps}
+         \PY{l+s+sd}{backends, and requires that you have tex and the other dependencies}
+         \PY{l+s+sd}{described at http://matplotlib.org/users/usetex.html}
+         \PY{l+s+sd}{properly installed on your system.  The first time you run a script}
+         \PY{l+s+sd}{you will see a lot of output from tex and associated tools.  The next}
+         \PY{l+s+sd}{time, the run may be silent, as a lot of the information is cached in}
+         \PY{l+s+sd}{\PYZti{}/.tex.cache}
+         
+         \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
+         \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+         \PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+         
+         
+         \PY{c}{\PYZsh{} Example data}
+         \PY{n}{t} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{l+m+mf}{0.0}\PY{p}{,} \PY{l+m+mf}{1.0} \PY{o}{+} \PY{l+m+mf}{0.01}\PY{p}{,} \PY{l+m+mf}{0.01}\PY{p}{)}
+         \PY{n}{s} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{cos}\PY{p}{(}\PY{l+m+mi}{4} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{pi} \PY{o}{*} \PY{n}{t}\PY{p}{)} \PY{o}{+} \PY{l+m+mi}{2}
+         
+         \PY{n}{plt}\PY{o}{.}\PY{n}{rc}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{text}\PY{l+s}{\PYZsq{}}\PY{p}{,} \PY{n}{usetex}\PY{o}{=}\PY{k}{True}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{rc}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{font}\PY{l+s}{\PYZsq{}}\PY{p}{,} \PY{n}{family}\PY{o}{=}\PY{l+s}{\PYZsq{}}\PY{l+s}{sans}\PY{l+s}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{t}\PY{p}{,} \PY{n}{s}\PY{p}{)}
+         
+         \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s}{r\PYZsq{}}\PY{l+s}{\PYZbs{}}\PY{l+s}{textbf\PYZob{}time\PYZcb{} (s)}\PY{l+s}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s}{r\PYZsq{}}\PY{l+s}{\PYZbs{}}\PY{l+s}{textit\PYZob{}voltage\PYZcb{} (mV)}\PY{l+s}{\PYZsq{}}\PY{p}{,}\PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{16}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s}{r\PYZdq{}}\PY{l+s}{\PYZbs{}}\PY{l+s}{TeX}\PY{l+s}{\PYZbs{}}\PY{l+s}{ is Number }\PY{l+s}{\PYZdq{}}
+                   \PY{l+s}{r\PYZdq{}}\PY{l+s}{\PYZdl{}}\PY{l+s}{\PYZbs{}}\PY{l+s}{displaystyle}\PY{l+s}{\PYZbs{}}\PY{l+s}{sum\PYZus{}\PYZob{}n=1\PYZcb{}\PYZca{}}\PY{l+s}{\PYZbs{}}\PY{l+s}{infty}\PY{l+s}{\PYZbs{}}\PY{l+s}{frac\PYZob{}\PYZhy{}e\PYZca{}\PYZob{}i}\PY{l+s}{\PYZbs{}}\PY{l+s}{pi\PYZcb{}\PYZcb{}\PYZob{}2\PYZca{}n\PYZcb{}\PYZdl{}!}\PY{l+s}{\PYZdq{}}\PY{p}{,}
+                   \PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{16}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s}{\PYZsq{}}\PY{l+s}{gray}\PY{l+s}{\PYZsq{}}\PY{p}{)}
+         \PY{c}{\PYZsh{} Make room for the ridiculously large title.}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{subplots\PYZus{}adjust}\PY{p}{(}\PY{n}{top}\PY{o}{=}\PY{l+m+mf}{0.8}\PY{p}{)}
+         
+         \PY{n}{plt}\PY{o}{.}\PY{n}{savefig}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{tex\PYZus{}demo}\PY{l+s}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{Stroop Effect_files/Stroop Effect_14_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    The bar graph above shows graphically that each subject took more time
+on the ICS word list than on the CCS word list.
+
+    \section{Now, perform the statistical test and report your results. What
+is your confidence level and your critical statistic value? Do you
+reject the null hypothesis or fail to reject it? Come to a conclusion in
+terms of the experiment task. Did the results match up with your
+expectations?}\label{now-perform-the-statistical-test-and-report-your-results.-what-is-your-confidence-level-and-your-critical-statistic-value-do-you-reject-the-null-hypothesis-or-fail-to-reject-it-come-to-a-conclusion-in-terms-of-the-experiment-task.-did-the-results-match-up-with-your-expectations}
+
+    \section{What do you think is responsible for the effects observed? Can
+you think of an alternative or similar task that would result in a
+similar effect? Some research about the problem will be helpful for
+thinking about these two
+questions!}\label{what-do-you-think-is-responsible-for-the-effects-observed-can-you-think-of-an-alternative-or-similar-task-that-would-result-in-a-similar-effect-some-research-about-the-problem-will-be-helpful-for-thinking-about-these-two-questions}
+
+    \paragraph{Refrences:}\label{refrences}
+
+    \begin{itemize}
+\item
+  PANDAS:
+\item
+  http://pandas.pydata.org/pandas-docs/stable/io.html\#io-read-csv-table
+  \# link for reading in CSV file
+\item
+  Udacity:
+\item
+  https://docs.google.com/document/d/1-OkpZLjG\_kX9J6LIQ5IltsqMzVWjh36QpnP2RYpVdPU/pub
+  \# Udacity official document on general instructions for further
+  projects as well as specifically for the Stroop Effect, P1.
+\item
+  https://docs.google.com/document/d/1bqyi1Fm5truesLhmbAq16Zl-Ajj9bnNIU\_68P60nDQg/pub
+  \# Udacity official documentation outlining what is expected to
+  satisfactorily complete a project
+\item
+  matplotlib
+\item
+  http://matplotlib.org/examples/api/barchart\_demo.html \# The bar
+  graph example was used as a basis for the bar graph in this report.
+\item
+  http://matplotlib.org/api/colors\_api.html \# understanding colors in
+  matplotlib
+\item
+  http://matplotlib.org/users/usetex.html \# using LaTeX in matplotlib
+  graphs
+\end{itemize}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}19}]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
+         ipython3 nbconvert \PYZhy{}\PYZhy{}template udacity.tplx  \PYZhy{}\PYZhy{}to latex \PYZdq{}Stroop Effect.ipynb\PYZdq{} 2\PYZgt{}\PYZam{}1 \PYZgt{} build.log
+         pdflatex \PYZdq{}Stroop Effect\PYZdq{} \PYZgt{}\PYZgt{} build.log
+         bibtex \PYZdq{}Stroop Effect\PYZdq{} \PYZgt{}\PYZgt{} build.log
+         pdflatex \PYZdq{}Stroop Effect\PYZdq{} \PYZgt{}\PYZgt{} build.log
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+/home/yigal/.local/lib/python3.4/site-packages/IPython/nbconvert.py:13: ShimWarning: The `IPython.nbconvert` package has been deprecated. You should import from ipython\_nbconvert instead.
+  "You should import from ipython\_nbconvert instead.", ShimWarning)
+[NbConvertApp] Converting notebook Stroop Effect.ipynb to latex
+[NbConvertApp] Support files will be in Stroop Effect\_files/
+[NbConvertApp] Making directory Stroop Effect\_files
+[NbConvertApp] Making directory Stroop Effect\_files
+[NbConvertApp] Writing 32871 bytes to Stroop Effect.tex
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{o}{\PYZpc{}}\PY{k}{ls}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{c}{\PYZsh{}from notebook.nbextensions import install\PYZus{}nbextension}
+        \PY{c}{\PYZsh{}install\PYZus{}nbextension(\PYZsq{}https://goo.gl/5TK96v\PYZsq{}, user=True, destination=\PYZdq{}vim\PYZus{}binding.js\PYZdq{})}
+        \PY{c}{\PYZsh{} Or if you prefre a full URL}
+        \PY{c}{\PYZsh{}install\PYZus{}nbextension(\PYZsq{}https://rawgithub.com/lambdalisue/jupyter\PYZhy{}vim\PYZhy{}binding/master/nbextensions/vim\PYZus{}binding.js\PYZsq{}, user=True)}
+        \PY{c}{\PYZsh{}Jupyter.utils.load\PYZus{}extensions(\PYZsq{}vim\PYZus{}binding\PYZsq{})}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}8}]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{javascript}
+        require([\PYZsq{}base/js/utils\PYZsq{}],
+        function(utils) \PYZob{}
+           utils.load\PYZus{}extensions(\PYZsq{}calico\PYZhy{}spell\PYZhy{}check\PYZsq{}, \PYZsq{}calico\PYZhy{}document\PYZhy{}tools\PYZsq{}, \PYZsq{}calico\PYZhy{}cell\PYZhy{}tools\PYZsq{});
+        \PYZcb{});
+\end{Verbatim}
+
+    
+    \begin{verbatim}
+<IPython.core.display.Javascript object>
+    \end{verbatim}
+
+    
+    Examples of citations: \hyperref[cite-PER-GRA:2007]{(Pérez and Granger,
+2007)} or \hyperref[cite-Papa2007]{(Papa and Markov, 2007)}
+\hyperref[cite-Udacity2015]{(Udacity, 2015)} \hyperref[cite-WinNT]{(,
+1999)}.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}24}]:} \PY{o}{!}gksu ipython3 install\PYZhy{}nbextension https://bitbucket.org/ipre/calico/downloads/calico\PYZhy{}document\PYZhy{}tools\PYZhy{}1.0.zip
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+(gksu:11779): GConf-CRITICAL **: gconf\_value\_free: assertion 'value != NULL' failed
+Traceback (most recent call last):
+  File "/usr/local/bin/ipython3", line 11, in <module>
+    sys.exit(start\_ipython())
+  File "/usr/local/lib/python3.4/dist-packages/IPython/\_\_init\_\_.py", line 118, in start\_ipython
+    return launch\_new\_instance(argv=argv, **kwargs)
+  File "/usr/local/lib/python3.4/dist-packages/traitlets/config/application.py", line 591, in launch\_instance
+    app.initialize(argv)
+  File "<decorator-gen-111>", line 2, in initialize
+  File "/usr/local/lib/python3.4/dist-packages/traitlets/config/application.py", line 75, in catch\_config\_error
+    return method(app, *args, **kwargs)
+  File "/usr/local/lib/python3.4/dist-packages/IPython/terminal/ipapp.py", line 305, in initialize
+    super(TerminalIPythonApp, self).initialize(argv)
+  File "<decorator-gen-7>", line 2, in initialize
+  File "/usr/local/lib/python3.4/dist-packages/traitlets/config/application.py", line 75, in catch\_config\_error
+    return method(app, *args, **kwargs)
+  File "/usr/local/lib/python3.4/dist-packages/IPython/core/application.py", line 386, in initialize
+    self.parse\_command\_line(argv)
+  File "/usr/local/lib/python3.4/dist-packages/IPython/terminal/ipapp.py", line 300, in parse\_command\_line
+    return super(TerminalIPythonApp, self).parse\_command\_line(argv)
+  File "<decorator-gen-4>", line 2, in parse\_command\_line
+  File "/usr/local/lib/python3.4/dist-packages/traitlets/config/application.py", line 75, in catch\_config\_error
+    return method(app, *args, **kwargs)
+  File "/usr/local/lib/python3.4/dist-packages/traitlets/config/application.py", line 487, in parse\_command\_line
+    return self.initialize\_subcommand(subc, subargv)
+  File "<decorator-gen-3>", line 2, in initialize\_subcommand
+  File "/usr/local/lib/python3.4/dist-packages/traitlets/config/application.py", line 75, in catch\_config\_error
+    return method(app, *args, **kwargs)
+  File "/usr/local/lib/python3.4/dist-packages/traitlets/config/application.py", line 418, in initialize\_subcommand
+    subapp = import\_item(subapp)
+  File "/usr/local/lib/python3.4/dist-packages/ipython\_genutils/importstring.py", line 31, in import\_item
+    module = \_\_import\_\_(package, fromlist=[obj])
+ImportError: No module named 'notebook'
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}20}]:} \PY{n}{IPython}\PY{o}{.}\PY{n}{display}\PY{o}{.}\PY{n}{YouTubeVideo}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{YbM8rrj\PYZhy{}Bms}\PY{l+s}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+        ---------------------------------------------------------------------------
+
+        NameError                                 Traceback (most recent call last)
+
+        <ipython-input-20-8f1b1a3b6f91> in <module>()
+    ----> 1 IPython.display.YouTubeVideo("YbM8rrj-Bms")
+    
+
+        NameError: name 'IPython' is not defined
+
+    \end{Verbatim}
+
+%{[}\^{}{]}(\#ref-2) Pérez, Fernando and Granger, Brian E.. 2007.
+%\emph{IPython: a System for Interactive Scientific Computing}.
+%\href{http://ipython.org}{URL}
+%
+%{[}\^{}{]}(\#ref-3) Papa, David A. and Markov, Igor L.. 2007.
+%\emph{Hypergraph partitioning and clustering}.
+%\href{http://www.podload.org/pubs/book/part_survey.pdf}{URL}
+%
+%{[}\^{}{]}(\#ref-4) Udacity, Udacity. 2015. \emph{Statistics: The
+%Science of Decisions - Project Instructions}.
+%\href{https://docs.google.com/document/d/1-OkpZLjG_kX9J6LIQ5IltsqMzVWjh36QpnP2RYpVdPU/pub}{URL}
+%
+%{[}\^{}{]}(\#ref-5) MultiMedia LLC. 1999. \emph{MS Windows NT Kernel
+%Description}.
+%\href{http://web.archive.org/web/20080207010024/http://www.808multimedia.com/winnt/kernel.htm}{URL}
+
+\bibliographystyle{unsrt}
+\bibliography{udacity}
+\end{document}
