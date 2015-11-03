@@ -1,7 +1,7 @@
 \documentclass{article}
     \usepackage{graphicx} % Used to insert images
     \usepackage{adjustbox} % Used to constrain images to a maximum size 
-    \usepackage{color} % Allow colors to be defined
+    \usepackage{xcolor} % Allow colors to be defined
     \usepackage{enumerate} % Needed for markdown enumerations to work
     \usepackage{geometry} % Used to adjust the document margins
     \usepackage{amsmath} % Equations
@@ -18,20 +18,23 @@
     % internal cross-reference links, web links for URLs, etc.)
     \usepackage{tikz}
     \usepackage{pgfplots}
+    \usepackage[]{ulem}
     \pgfplotsset{compat=newest}
-    \usepackage{hyperref}
     \usepackage{url}
     \usepackage{longtable} % longtable support required by pandoc >1.10
     \usepackage{booktabs}  % table support for pandoc > 1.12.2
     \usepackage{ulem} % ulem is needed to support strikethroughs (\sout)
+    \usepackage{titlesec}
+    \titleformat{\section}{\normalfont\Large\bfseries}{Question {\thesection}: }{1em}{}
     \usepackage[
       autocite=inline, 
       backend=biber,
       labeldate=true, 
       refsegment=section,
       uniquename=full,
-    uniquelist=true]
+      uniquelist=true]
     {biblatex}
+    \usepackage{hyperref}
     \addbibresource{udacity.bib}
     \definecolor{orange}{cmyk}{0,0.4,0.8,0.2}
     \definecolor{darkorange}{rgb}{.71,0.21,0.01}
@@ -110,7 +113,7 @@
     \def\lt{<}
     % Document parameters
     
-\title{Exploring the Stroop Effect utilizing IPython}
+\title{Exploring the Stroop Effect using Python}
 \author{Yigal Weinstein}
 
     % Pygments definitions
@@ -218,8 +221,8 @@
     \sloppy 
     % Slightly bigger margins than the latex defaults
  \hypersetup{pdfauthor={Yigal Weinstein},
-            pdftitle={Data Science Notebook},
-            pdfsubject={data science},
+            pdftitle={P1: Stroop Effect},
+            pdfsubject={data science, Udacity, MOOC},
             pdfkeywords={data science, statistics, probability, machine learning},
             %pdfpagelayout={TwoPageLeft}, % Displays two pages, odd-numbered pages to the left 
             pdfcreator={PdfLaTeX},
@@ -231,7 +234,7 @@
             runcolor={blue},              %  Color for run links (launch annotations).        
             linkcolor={red!50!black},
             citecolor={blue!50!black},
-            urlcolor={blue!80!black}
+            %urlcolor={blue!80!black}
             breaklinks=true,  % so long urls are correctly broken across lines
            }           
  
@@ -250,30 +253,47 @@ condition. In the congruent words condition, the words being displayed
 are color words whose names match the colors in which they are printed:
 for example {\color{red} RED }, {\color{blue} BLUE }. In the incongruent words condition, the words
 displayed are color words whose names do not match the colors in which
-they are printed: for example { \color{yellow}PURPLE }, {\color{green} ORANGE }. In each case, we measure
+they are printed: for example { \color{yellow}PURPLE }, {\color{green} ORANGE}. In each case, we measure
 the time it takes to name the ink colors in equally-sized lists. Each
 participant will go through and record a time from each condition.
 \cite{Udacity-P1-Stroop}
 \end{quote}
-\section{What is our independent variable? What is our dependent
-variable?}
-\label{sec:question1}
-The independent variable is a binary condition that of either congruency or
-incongruency between the color of a word, and the symantic meaning of the word.
-As example the word `RED' is a congruent example where the word `red' has the
-color of its symantic meaning, i.e.~the color it represents, and `BLUE' is an
-incongruent case where the word `blue' which has the symantic meaning of the
-color blue is instead the color green. Frome here on out the terms congruent
-color selection, CCS, and incongruent color selection, ICS, will be used to
-denote the two conditions the dependent variable may take that of a word
-representing a color being colored with or with a different color respectively.
+This project attempts to follow the outline provided in \cite{Udacity-P1-Stroop}
+and the project rubrick set forth in \cite{Udacity-P1-rubrick}.
+\newcommand{\sectiontitle}[2]{
+\section{#1}
+\vspace{-1em}
+\mbox{\begin{minipage}{5in}
+\textbf{
+  \uline{
+    #2
+  }}
+\end{minipage}
+}
+\vspace{1em}
+}
+\sectiontitle{Identify variables in the experiment}
+{\label{sec:question1}
+what is our independent variable? what is our dependent variable?}
+\par{The independent variable is a binary condition that of either congruency or
+  incongruency between the color of a word, and the symantic meaning of the
+  word.  As example the word {\color{red}`RED'} is a congruent example where the
+  word `red' has the color of its symantic meaning, i.e. the color it
+  represents, and {\color{green}`BLUE'} is an incongruent case where the word
+  `blue' which has the symantic meaning of the color blue is instead the color
+  green. Frome here on out the terms congruent color selection, CCS, and
+incongruent color selection, ICS, will be used to denote the two conditions the
+dependent variable may take that of a word representing a color being colored
+with or with a different color respectively.}
 
 The dependent variable is the time, in seconds, it takes to read through an
 equal sized lists of CCS or ICS words.  
 
-\section{What is an appropriate set of hypotheses for this task? What kind of
-statistical test do you expect to perform? Justify your choices.}
-\label{sec:question2}
+\sectiontitle{Establish a hypothesis and statistical test}{\label{sec:question2}
+What is an appropriate set of hypotheses for this task?\\What kind of statistical
+test do you expect to perform? 
+Justify your choices.}
+
 The null hypothesis, \(H_0\) is the statement that the ICS task will take less
 or an equal amount of time to the CCS task. The alternative hypothesis, \(H_A\)
 is the statement that the mean population time to read an ICS list will be
@@ -301,17 +321,23 @@ As the two sets of data are correlated, the same subjects are used to take both
 the ICS and CCS tests, the proper test to use is a dependent t-test for paired
 samples.  Given the hypothesis devised above the single tail test will be used.
 
-\section{Report some descriptive statistics regarding this dataset.  Include at
-least one measure of central tendency and at least one measure of variability.}
-\label{sec:question3}
-  Below I've printed the mean, sample standard deviation, minimum values,
+\sectiontitle{Report descriptive statistics}{
+  \label{sec:question3}
+Report some descriptive statistics regarding this dataset.\\
+Include at least one measure of central tendency and at least one measure of variability.}
+
+In Figure \ref{fig:descriptive_data_describe} is printed the mean, sample standard deviation, minimum values,
 25th, 50th - median, 75th percentiles, and maximums for both the CCS
 and ICS samples, all values are in seconds. 
 \begin{figure}[ht]
   \centering
   \input{data_describe}
-  \caption{The code used to generate the table is quite simple please see
-  \url{}}
+  \caption{The source code for the table may be found:
+    \href{https://github.com/8leggedunicorn/p1_stroop_effect/blob/master/p1_stroop_effect.py\#L1-L13}
+        {p1\_stroop\_effect.py}.
+      The above table was generated with help from official PANDAS API
+      documentation as follows:
+    \cite{PANDAS-csv}, \cite{PANDAS-to-latex}, \cite{PANDAS-describe-df}}
   \label{fig:descriptive_data_describe}
 \end{figure}
 \begin{center}
@@ -341,273 +367,67 @@ From both the sample standard deviation and the range we can see that the spread
 of the ICS sample is greater both in terms of the range, i.e.~outliers, and of
 the sample standard deviation:
 
-\section{Provide one or two visualizations that show the distribution of
-the sample data. Write one or two sentences noting what you observe
-about the plot or
-plots.}
+\sectiontitle{Plot the data}
+{\label{sec:question4}
+Provide one or two visualizations that show the distribution of
+the sample data.\\
+Write one or two sentences noting what you observe about the plot or plots.}
+
+Figure \ref{fig:bar-graph-ccs-vs-ics-times} points to the same ideas described
+in the  descriptive statistics presented in the previous section. There are no
+real outliers for the CCS case, which shows up in the difference in the standard
+deviations of the two samples above, and that the mean and median for the CCS
+case are very close together.  What is interesting to note, however is that the
+two greatest times for the ICS certainly don't line up with the CCS time, that
+is sorting the CCS list certainly in know sorts the ICS list, which might be
+expected, and subject 20 having the second greatest ICS time isn't even to the
+right of the mean when looking at their CCS time.  This graph also explicitly
+shows that each subject takes a greater time for their ICS time than their CCS
+time, there are no exceptions.
 \label{question4}
+\begin{figure}[ht]
+  \centering
+  \includegraphics{bar_graph.pdf}
+  \caption{Bar graph of the time to complete the CCS and ICS list for each
+    subject.  The subject is labled in order of their position in the original
+    data, however the data is ordered by CCS time, from least to greatest.  The
+    code for the plot can be found in
+    \href{https://github.com/8leggedunicorn/p1_stroop_effect/blob/master/p1_stroop_effect.py}{p1\_stroop\_effect.py}
+    and demos and documentation from the official Matplotlib website were used
+    to generate it, 
+    \cite{Matplotlib-bar}, 
+    \cite{Matplotlib-colors},
+    \cite{Matplotlib-legend-transparent}, 
+    \cite{Matplotlib-pdf},
+    \cite{Matplotlib-pyplot}, 
+    \cite{Python-comprehension}}
+  \label{fig:bar-graph-ccs-vs-ics-times}
+\end{figure}
+The naively evenly distributed nature of these two data sets leads to two histogram
+graphs, one of the CCS and ICS results.  Please look to figures 
+\ref{fig:ICS-histogram} to view such plots:
+\begin{figure}[ht]
+  \centering
+  \includegraphics[scale=0.75]{figure}
+  \caption{The graph above is a histogram of the ICS data.  Note how it is
+  skewed heavily to the left.  This is due to the two outliers with times
+  greater than $32s$.}
+  \label{fig:ICS-histogram}
+\end{figure}
+Interestingly enough at first glimpse of either of these two histograms it
+becomes clear that the are both heavily skewed to the left, especially in the
+case of the ICS data set.
+\sectiontitle{Perform the statistical test and interpret your results}{
+\label{sec:question5}
+Now, perform the statistical test and report your results.
+What is your confidence level and your critical statistic value?
+Do you reject the null hypothesis or fail to reject it?
+Come to a conclusion in terms of the experiment task. Did the results match up with your expectations?} 
 
-    
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}17}]:} \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
-         \PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
-         
-         \PY{o}{\PYZpc{}}\PY{k}{pylab} inline
-         \PY{n}{pylab}\PY{o}{.}\PY{n}{rcParams}\PY{p}{[}\PY{l+s}{\PYZsq{}}\PY{l+s}{figure.figsize}\PY{l+s}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{p}{(}\PY{l+m+mf}{8.0}\PY{p}{,} \PY{l+m+mf}{7.0}\PY{p}{)}
-         
-         \PY{n}{fig}\PY{p}{,} \PY{n}{ax} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{p}{)}
-         
-         \PY{n}{index} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{n}{stroopdata}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
-         \PY{n}{bar\PYZus{}width} \PY{o}{=} \PY{l+m+mf}{0.36}
-         
-         \PY{n}{opacity} \PY{o}{=} \PY{l+m+mf}{0.6}
-         
-         \PY{n}{rects1} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{bar}\PY{p}{(}\PY{n}{index}\PY{p}{,} \PY{n}{stroopdata}\PY{p}{[}\PY{l+s}{\PYZsq{}}\PY{l+s}{Congruent}\PY{l+s}{\PYZsq{}}\PY{p}{]}\PY{p}{,} 
-                          \PY{n}{bar\PYZus{}width}\PY{p}{,}
-                          \PY{n}{alpha}\PY{o}{=}\PY{n}{opacity}\PY{p}{,}
-                          \PY{n}{color}\PY{o}{=}\PY{l+s}{\PYZsq{}}\PY{l+s}{k}\PY{l+s}{\PYZsq{}}\PY{p}{,}
-                          \PY{n}{label}\PY{o}{=}\PY{l+s}{\PYZsq{}}\PY{l+s}{CCS Sample}\PY{l+s}{\PYZsq{}}\PY{p}{)}
-         
-         \PY{n}{rects2} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{bar}\PY{p}{(}\PY{n}{index} \PY{o}{+} \PY{n}{bar\PYZus{}width}\PY{p}{,} \PY{n}{stroopdata}\PY{p}{[}\PY{l+s}{\PYZsq{}}\PY{l+s}{Incongruent}\PY{l+s}{\PYZsq{}}\PY{p}{]}\PY{p}{,} 
-                          \PY{n}{bar\PYZus{}width}\PY{p}{,}
-                          \PY{n}{alpha}\PY{o}{=}\PY{n}{opacity}\PY{p}{,}
-                          \PY{n}{color}\PY{o}{=}\PY{l+s}{\PYZsq{}}\PY{l+s}{b}\PY{l+s}{\PYZsq{}}\PY{p}{,}
-                          \PY{n}{label}\PY{o}{=}\PY{l+s}{\PYZsq{}}\PY{l+s}{ICS Sample}\PY{l+s}{\PYZsq{}}\PY{p}{)}
-         
-         \PY{c}{\PYZsh{} add some text for labels, title and axes ticks}
-         \PY{n}{plt}\PY{o}{.}\PY{n}{rc}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{text}\PY{l+s}{\PYZsq{}}\PY{p}{,} \PY{n}{usetex}\PY{o}{=}\PY{k}{True}\PY{p}{)}
-         \PY{n}{plt}\PY{o}{.}\PY{n}{rc}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{font}\PY{l+s}{\PYZsq{}}\PY{p}{,} \PY{n}{family}\PY{o}{=}\PY{l+s}{\PYZsq{}}\PY{l+s}{sans}\PY{l+s}{\PYZsq{}}\PY{p}{)}
-         \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s}{r\PYZsq{}}\PY{l+s}{\PYZbs{}}\PY{l+s}{textbf\PYZob{}Subject Number\PYZcb{}}\PY{l+s}{\PYZsq{}}\PY{p}{)}
-         \PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s}{r\PYZsq{}}\PY{l+s}{\PYZbs{}}\PY{l+s}{textit\PYZob{}Time\PYZcb{} (s)}\PY{l+s}{\PYZsq{}}\PY{p}{,} \PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{16}\PY{p}{)}
-         \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s}{r\PYZsq{}}\PY{l+s}{Scores for CCS and ICS}\PY{l+s}{\PYZsq{}}\PY{p}{,}\PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{16}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s}{\PYZsq{}}\PY{l+s}{gray}\PY{l+s}{\PYZsq{}}\PY{p}{)}
-         \PY{n}{plt}\PY{o}{.}\PY{n}{xticks}\PY{p}{(}\PY{n}{index} \PY{o}{+} \PY{n}{bar\PYZus{}width}\PY{p}{,} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{25}\PY{p}{)}\PY{p}{)}
-         \PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
-         
-         \PY{n}{plt}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{p}{)}
-         \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
-\end{Verbatim}
-
-%\input{bar_graph_test.tex}
-    \begin{Verbatim}[commandchars=\\\{\}]
-Populating the interactive namespace from numpy and matplotlib
-    \end{Verbatim}
-    \begin{center}
-      \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{bar_graph.pdf}
-    \end{center}
-    { \hspace*{\fill} \\}
-    
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}12}]:} \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
-         \PY{l+s+sd}{Demo of TeX rendering.}
-         
-         \PY{l+s+sd}{You can use TeX to render all of your matplotlib text if the rc}
-         \PY{l+s+sd}{parameter text.usetex is set.  This works currently on the agg and ps}
-         \PY{l+s+sd}{backends, and requires that you have tex and the other dependencies}
-         \PY{l+s+sd}{described at http://matplotlib.org/users/usetex.html}
-         \PY{l+s+sd}{properly installed on your system.  The first time you run a script}
-         \PY{l+s+sd}{you will see a lot of output from tex and associated tools.  The next}
-         \PY{l+s+sd}{time, the run may be silent, as a lot of the information is cached in}
-         \PY{l+s+sd}{\PYZti{}/.tex.cache}
-         
-         \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}}
-         \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
-         \PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
-         
-         
-         \PY{c}{\PYZsh{} Example data}
-         \PY{n}{t} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{l+m+mf}{0.0}\PY{p}{,} \PY{l+m+mf}{1.0} \PY{o}{+} \PY{l+m+mf}{0.01}\PY{p}{,} \PY{l+m+mf}{0.01}\PY{p}{)}
-         \PY{n}{s} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{cos}\PY{p}{(}\PY{l+m+mi}{4} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{pi} \PY{o}{*} \PY{n}{t}\PY{p}{)} \PY{o}{+} \PY{l+m+mi}{2}
-         
-         \PY{n}{plt}\PY{o}{.}\PY{n}{rc}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{text}\PY{l+s}{\PYZsq{}}\PY{p}{,} \PY{n}{usetex}\PY{o}{=}\PY{k}{True}\PY{p}{)}
-         \PY{n}{plt}\PY{o}{.}\PY{n}{rc}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{font}\PY{l+s}{\PYZsq{}}\PY{p}{,} \PY{n}{family}\PY{o}{=}\PY{l+s}{\PYZsq{}}\PY{l+s}{sans}\PY{l+s}{\PYZsq{}}\PY{p}{)}
-         \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{t}\PY{p}{,} \PY{n}{s}\PY{p}{)}
-         
-         \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s}{r\PYZsq{}}\PY{l+s}{\PYZbs{}}\PY{l+s}{textbf\PYZob{}time\PYZcb{} (s)}\PY{l+s}{\PYZsq{}}\PY{p}{)}
-         \PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s}{r\PYZsq{}}\PY{l+s}{\PYZbs{}}\PY{l+s}{textit\PYZob{}voltage\PYZcb{} (mV)}\PY{l+s}{\PYZsq{}}\PY{p}{,}\PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{16}\PY{p}{)}
-         \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s}{r\PYZdq{}}\PY{l+s}{\PYZbs{}}\PY{l+s}{TeX}\PY{l+s}{\PYZbs{}}\PY{l+s}{ is Number }\PY{l+s}{\PYZdq{}}
-                   \PY{l+s}{r\PYZdq{}}\PY{l+s}{\PYZdl{}}\PY{l+s}{\PYZbs{}}\PY{l+s}{displaystyle}\PY{l+s}{\PYZbs{}}\PY{l+s}{sum\PYZus{}\PYZob{}n=1\PYZcb{}\PYZca{}}\PY{l+s}{\PYZbs{}}\PY{l+s}{infty}\PY{l+s}{\PYZbs{}}\PY{l+s}{frac\PYZob{}\PYZhy{}e\PYZca{}\PYZob{}i}\PY{l+s}{\PYZbs{}}\PY{l+s}{pi\PYZcb{}\PYZcb{}\PYZob{}2\PYZca{}n\PYZcb{}\PYZdl{}!}\PY{l+s}{\PYZdq{}}\PY{p}{,}
-                   \PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{16}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s}{\PYZsq{}}\PY{l+s}{gray}\PY{l+s}{\PYZsq{}}\PY{p}{)}
-         \PY{c}{\PYZsh{} Make room for the ridiculously large title.}
-         \PY{n}{plt}\PY{o}{.}\PY{n}{subplots\PYZus{}adjust}\PY{p}{(}\PY{n}{top}\PY{o}{=}\PY{l+m+mf}{0.8}\PY{p}{)}
-         
-         \PY{n}{plt}\PY{o}{.}\PY{n}{savefig}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{tex\PYZus{}demo}\PY{l+s}{\PYZsq{}}\PY{p}{)}
-         \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
-\end{Verbatim}
-
-    \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{Stroop Effect_files/Stroop Effect_14_0.png}
-    \end{center}
-    { \hspace*{\fill} \\}
-    
-    The bar graph above shows graphically that each subject took more time
-on the ICS word list than on the CCS word list.
-
-    \section{Now, perform the statistical test and report your results. What
-is your confidence level and your critical statistic value? Do you
-reject the null hypothesis or fail to reject it? Come to a conclusion in
-terms of the experiment task. Did the results match up with your
-expectations?}\label{now-perform-the-statistical-test-and-report-your-results.-what-is-your-confidence-level-and-your-critical-statistic-value-do-you-reject-the-null-hypothesis-or-fail-to-reject-it-come-to-a-conclusion-in-terms-of-the-experiment-task.-did-the-results-match-up-with-your-expectations}
-
-    \section{What do you think is responsible for the effects observed? Can
-you think of an alternative or similar task that would result in a
-similar effect? Some research about the problem will be helpful for
-thinking about these two
-questions!}\label{what-do-you-think-is-responsible-for-the-effects-observed-can-you-think-of-an-alternative-or-similar-task-that-would-result-in-a-similar-effect-some-research-about-the-problem-will-be-helpful-for-thinking-about-these-two-questions}
-
-    \paragraph{Refrences:}\label{refrences}
-
-    \begin{itemize}
-\item
-  PANDAS:
-\item
-  http://pandas.pydata.org/pandas-docs/stable/io.html\#io-read-csv-table
-  \# link for reading in CSV file
-\item
-  Udacity:
-\item
-  https://docs.google.com/document/d/1-OkpZLjG\_kX9J6LIQ5IltsqMzVWjh36QpnP2RYpVdPU/pub
-  \# Udacity official document on general instructions for further
-  projects as well as specifically for the Stroop Effect, P1.
-\item
-  https://docs.google.com/document/d/1bqyi1Fm5truesLhmbAq16Zl-Ajj9bnNIU\_68P60nDQg/pub
-  \# Udacity official documentation outlining what is expected to
-  satisfactorily complete a project
-\item
-  matplotlib
-\item
-  http://matplotlib.org/examples/api/barchart\_demo.html \# The bar
-  graph example was used as a basis for the bar graph in this report.
-\item
-  http://matplotlib.org/api/colors\_api.html \# understanding colors in
-  matplotlib
-\item
-  http://matplotlib.org/users/usetex.html \# using LaTeX in matplotlib
-  graphs
-\end{itemize}
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}19}]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{bash}
-         ipython3 nbconvert \PYZhy{}\PYZhy{}template udacity.tplx  \PYZhy{}\PYZhy{}to latex \PYZdq{}Stroop Effect.ipynb\PYZdq{} 2\PYZgt{}\PYZam{}1 \PYZgt{} build.log
-         pdflatex \PYZdq{}Stroop Effect\PYZdq{} \PYZgt{}\PYZgt{} build.log
-         bibtex \PYZdq{}Stroop Effect\PYZdq{} \PYZgt{}\PYZgt{} build.log
-         pdflatex \PYZdq{}Stroop Effect\PYZdq{} \PYZgt{}\PYZgt{} build.log
-\end{Verbatim}
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-/home/yigal/.local/lib/python3.4/site-packages/IPython/nbconvert.py:13: ShimWarning: The `IPython.nbconvert` package has been deprecated. You should import from ipython\_nbconvert instead.
-  "You should import from ipython\_nbconvert instead.", ShimWarning)
-[NbConvertApp] Converting notebook Stroop Effect.ipynb to latex
-[NbConvertApp] Support files will be in Stroop Effect\_files/
-[NbConvertApp] Making directory Stroop Effect\_files
-[NbConvertApp] Making directory Stroop Effect\_files
-[NbConvertApp] Writing 32871 bytes to Stroop Effect.tex
-    \end{Verbatim}
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor} }]:} \PY{o}{\PYZpc{}}\PY{k}{ls}
-\end{Verbatim}
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor} }]:} \PY{c}{\PYZsh{}from notebook.nbextensions import install\PYZus{}nbextension}
-        \PY{c}{\PYZsh{}install\PYZus{}nbextension(\PYZsq{}https://goo.gl/5TK96v\PYZsq{}, user=True, destination=\PYZdq{}vim\PYZus{}binding.js\PYZdq{})}
-        \PY{c}{\PYZsh{} Or if you prefre a full URL}
-        \PY{c}{\PYZsh{}install\PYZus{}nbextension(\PYZsq{}https://rawgithub.com/lambdalisue/jupyter\PYZhy{}vim\PYZhy{}binding/master/nbextensions/vim\PYZus{}binding.js\PYZsq{}, user=True)}
-        \PY{c}{\PYZsh{}Jupyter.utils.load\PYZus{}extensions(\PYZsq{}vim\PYZus{}binding\PYZsq{})}
-\end{Verbatim}
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}8}]:} \PY{o}{\PYZpc{}\PYZpc{}}\PY{k}{javascript}
-        require([\PYZsq{}base/js/utils\PYZsq{}],
-        function(utils) \PYZob{}
-           utils.load\PYZus{}extensions(\PYZsq{}calico\PYZhy{}spell\PYZhy{}check\PYZsq{}, \PYZsq{}calico\PYZhy{}document\PYZhy{}tools\PYZsq{}, \PYZsq{}calico\PYZhy{}cell\PYZhy{}tools\PYZsq{});
-        \PYZcb{});
-\end{Verbatim}
-
-    
-    \begin{verbatim}
-<IPython.core.display.Javascript object>
-    \end{verbatim}
-
-    
-    Examples of citations: \hyperref[cite-PER-GRA:2007]{(Pérez and Granger,
-2007)} or \hyperref[cite-Papa2007]{(Papa and Markov, 2007)}
-\hyperref[cite-Udacity2015]{(Udacity, 2015)} \hyperref[cite-WinNT]{(,
-1999)}.
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}24}]:} \PY{o}{!}gksu ipython3 install\PYZhy{}nbextension https://bitbucket.org/ipre/calico/downloads/calico\PYZhy{}document\PYZhy{}tools\PYZhy{}1.0.zip
-\end{Verbatim}
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-(gksu:11779): GConf-CRITICAL **: gconf\_value\_free: assertion 'value != NULL' failed
-Traceback (most recent call last):
-  File "/usr/local/bin/ipython3", line 11, in <module>
-    sys.exit(start\_ipython())
-  File "/usr/local/lib/python3.4/dist-packages/IPython/\_\_init\_\_.py", line 118, in start\_ipython
-    return launch\_new\_instance(argv=argv, **kwargs)
-  File "/usr/local/lib/python3.4/dist-packages/traitlets/config/application.py", line 591, in launch\_instance
-    app.initialize(argv)
-  File "<decorator-gen-111>", line 2, in initialize
-  File "/usr/local/lib/python3.4/dist-packages/traitlets/config/application.py", line 75, in catch\_config\_error
-    return method(app, *args, **kwargs)
-  File "/usr/local/lib/python3.4/dist-packages/IPython/terminal/ipapp.py", line 305, in initialize
-    super(TerminalIPythonApp, self).initialize(argv)
-  File "<decorator-gen-7>", line 2, in initialize
-  File "/usr/local/lib/python3.4/dist-packages/traitlets/config/application.py", line 75, in catch\_config\_error
-    return method(app, *args, **kwargs)
-  File "/usr/local/lib/python3.4/dist-packages/IPython/core/application.py", line 386, in initialize
-    self.parse\_command\_line(argv)
-  File "/usr/local/lib/python3.4/dist-packages/IPython/terminal/ipapp.py", line 300, in parse\_command\_line
-    return super(TerminalIPythonApp, self).parse\_command\_line(argv)
-  File "<decorator-gen-4>", line 2, in parse\_command\_line
-  File "/usr/local/lib/python3.4/dist-packages/traitlets/config/application.py", line 75, in catch\_config\_error
-    return method(app, *args, **kwargs)
-  File "/usr/local/lib/python3.4/dist-packages/traitlets/config/application.py", line 487, in parse\_command\_line
-    return self.initialize\_subcommand(subc, subargv)
-  File "<decorator-gen-3>", line 2, in initialize\_subcommand
-  File "/usr/local/lib/python3.4/dist-packages/traitlets/config/application.py", line 75, in catch\_config\_error
-    return method(app, *args, **kwargs)
-  File "/usr/local/lib/python3.4/dist-packages/traitlets/config/application.py", line 418, in initialize\_subcommand
-    subapp = import\_item(subapp)
-  File "/usr/local/lib/python3.4/dist-packages/ipython\_genutils/importstring.py", line 31, in import\_item
-    module = \_\_import\_\_(package, fromlist=[obj])
-ImportError: No module named 'notebook'
-    \end{Verbatim}
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}20}]:} \PY{n}{IPython}\PY{o}{.}\PY{n}{display}\PY{o}{.}\PY{n}{YouTubeVideo}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{YbM8rrj\PYZhy{}Bms}\PY{l+s}{\PYZdq{}}\PY{p}{)}
-\end{Verbatim}
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-
-        ---------------------------------------------------------------------------
-
-        NameError                                 Traceback (most recent call last)
-
-        <ipython-input-20-8f1b1a3b6f91> in <module>()
-    ----> 1 IPython.display.YouTubeVideo("YbM8rrj-Bms")
-    
-
-        NameError: name 'IPython' is not defined
-
-    \end{Verbatim}
-
-%{[}\^{}{]}(\#ref-2) Pérez, Fernando and Granger, Brian E.. 2007.
-%\emph{IPython: a System for Interactive Scientific Computing}.
-%\href{http://ipython.org}{URL}
-%
-%{[}\^{}{]}(\#ref-3) Papa, David A. and Markov, Igor L.. 2007.
-%\emph{Hypergraph partitioning and clustering}.
-%\href{http://www.podload.org/pubs/book/part_survey.pdf}{URL}
-%
-%{[}\^{}{]}(\#ref-4) Udacity, Udacity. 2015. \emph{Statistics: The
-%Science of Decisions - Project Instructions}.
-%\href{https://docs.google.com/document/d/1-OkpZLjG_kX9J6LIQ5IltsqMzVWjh36QpnP2RYpVdPU/pub}{URL}
-%
-%{[}\^{}{]}(\#ref-5) MultiMedia LLC. 1999. \emph{MS Windows NT Kernel
-%Description}.
-%\href{http://web.archive.org/web/20080207010024/http://www.808multimedia.com/winnt/kernel.htm}{URL}
-
+\sectiontitle{Digging deeper and extending the investigation}{
+\label{sec:question6}
+  What do you think is responsible for the effects observed?
+  Can you think of an alternative or similar task that would result in a similar
+  effect?  Some research about the problem will be helpful for thinking about these two questions!}
 \printbibliography
 \end{document}
