@@ -240,26 +240,6 @@
  
     \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
 
-\begin{document}
-\maketitle
-\section*{Introduction}
-So the stage is set with the following description for the Stroop experiment:
-\begin{quote}
-In a Stroop task, participants are presented with a list of words, with
-each word displayed in a color of ink. The participant's task is to say
-out loud the color of the ink in which the word is printed. The task has
-two conditions: a congruent words condition, and an incongruent words
-condition. In the congruent words condition, the words being displayed
-are color words whose names match the colors in which they are printed:
-for example {\color{red} RED }, {\color{blue} BLUE }. In the incongruent words condition, the words
-displayed are color words whose names do not match the colors in which
-they are printed: for example { \color{yellow}PURPLE }, {\color{green} ORANGE}. In each case, we measure
-the time it takes to name the ink colors in equally-sized lists. Each
-participant will go through and record a time from each condition.
-\cite{Udacity-P1-Stroop}
-\end{quote}
-This project attempts to follow the outline provided in \cite{Udacity-P1-Stroop}
-and the project rubrick set forth in \cite{Udacity-P1-rubrick}.
 \newcommand{\sectiontitle}[2]{
 \section{#1}
 \vspace{-1em}
@@ -272,25 +252,45 @@ and the project rubrick set forth in \cite{Udacity-P1-rubrick}.
 }
 \vspace{1em}
 }
+
+\begin{document}
+\maketitle
+\section*{Introduction}
+So the stage is set with the following description for the Stroop experiment:
+\begin{quote}
+In a Stroop task, participants are presented with a list of words, with
+each word displayed in a color of ink. The participant's task is to say
+out loud the color of the ink in which the word is printed. The task has
+two conditions: a congruent words condition, and an incongruent words
+condition. In the congruent words condition, the words being displayed
+are color words whose names match the colors in which they are printed:
+for example {\color{red} RED }, {\color{blue} BLUE }. In the incongruent words condition, the words
+fisplayed are color words whose names do not match the colors in which
+they are printed: for example { \color{yellow}PURPLE }, {\color{green} ORANGE}. In each case, we measure
+the time it takes to name the ink colors in equally-sized lists. Each
+participant will go through and record a time from each condition.
+\cite{Udacity-P1-Stroop}
+\end{quote}
+This project attempts to follow the outline provided in \cite{Udacity-P1-Stroop}
+and the project rubrick set forth in \cite{Udacity-P1-rubrick}.
 \sectiontitle{Identify variables in the experiment}
-{\label{sec:question1}
-what is our independent variable? what is our dependent variable?}
-\par{The independent variable is a binary condition that of either congruency or
+{
+\label{sec:question1}
+What is our independent variable? What is our dependent variable?}
   incongruency between the color of a word, and the symantic meaning of the
   word.  As example the word {\color{red}`RED'} is a congruent example where the
-  word `red' has the color of its symantic meaning, i.e. the color it
+  word `red' has the color of its semantic meaning, i.e. the color it
   represents, and {\color{green}`BLUE'} is an incongruent case where the word
   `blue' which has the symantic meaning of the color blue is instead the color
   green. Frome here on out the terms congruent color selection, CCS, and
 incongruent color selection, ICS, will be used to denote the two conditions the
 dependent variable may take that of a word representing a color being colored
-with or with a different color respectively.}
+with or with a different color respectively.
 
 The dependent variable is the time, in seconds, it takes to read through an
 equal sized lists of CCS or ICS words.  
-
 \sectiontitle{Establish a hypothesis and statistical test}{\label{sec:question2}
-What is an appropriate set of hypotheses for this task?\\What kind of statistical
+What is an appropriate set of hypotheses for this task? What kind of statistical
 test do you expect to perform? 
 Justify your choices.}
 
@@ -323,7 +323,7 @@ samples.  Given the hypothesis devised above the single tail test will be used.
 
 \sectiontitle{Report descriptive statistics}{
   \label{sec:question3}
-Report some descriptive statistics regarding this dataset.\\
+Report some descriptive statistics regarding this dataset.
 Include at least one measure of central tendency and at least one measure of variability.}
 
 In Figure \ref{fig:descriptive_data_describe} is printed the mean, sample standard deviation, minimum values,
@@ -369,22 +369,18 @@ the sample standard deviation:
 
 \sectiontitle{Plot the data}
 {\label{sec:question4}
-Provide one or two visualizations that show the distribution of
-the sample data.\\
+Provide one or two visualizations that show the distribution of the sample data.
 Write one or two sentences noting what you observe about the plot or plots.}
 
 Figure \ref{fig:bar-graph-ccs-vs-ics-times} points to the same ideas described
-in the  descriptive statistics presented in the previous section. There are no
+in the descriptive statistics presented in the previous section. There are no
 real outliers for the CCS case, which shows up in the difference in the standard
 deviations of the two samples above, and that the mean and median for the CCS
 case are very close together.  What is interesting to note, however is that the
-two greatest times for the ICS certainly don't line up with the CCS time, that
-is sorting the CCS list certainly in know sorts the ICS list, which might be
-expected, and subject 20 having the second greatest ICS time isn't even to the
-right of the mean when looking at their CCS time.  This graph also explicitly
-shows that each subject takes a greater time for their ICS time than their CCS
-time, there are no exceptions.
-\label{question4}
+two greatest times for the ICS are from subjects who take no where near the
+longest for the CCS trial. Subject 20 having the second greatest ICS time isn't
+even to the right of the mean.  This graph also explicitly shows that each
+subject takes a greater ICS time than their CCS time, there being no exceptions.
 \begin{figure}[ht]
   \centering
   \includegraphics{bar_graph.pdf}
@@ -403,20 +399,20 @@ time, there are no exceptions.
     \cite{Python-comprehension}}
   \label{fig:bar-graph-ccs-vs-ics-times}
 \end{figure}
-The naively evenly distributed nature of these two data sets leads to two histogram
-graphs, one of the CCS and ICS results.  Please look to figures 
-\ref{fig:ICS-histogram} to view such plots:
+One might think naively especially in the case of the CCS descriptive statistics
+that both data sets show an evenly distributed nature, however looking at the
+two histogram graphs, one of the CCS and ICS results we see this is hardly the
+picture.  Please look to figures \ref{fig:ICS-histogram} to view such plots:
 \begin{figure}[ht]
   \centering
-  \includegraphics[scale=0.75]{figure}
+  \includegraphics[scale=0.75]{histogram-ics}
   \caption{The graph above is a histogram of the ICS data.  Note how it is
   skewed heavily to the left.  This is due to the two outliers with times
   greater than $32s$.}
   \label{fig:ICS-histogram}
 \end{figure}
-Interestingly enough at first glimpse of either of these two histograms it
-becomes clear that the are both heavily skewed to the left, especially in the
-case of the ICS data set.
+At first glimpse of either of these two histograms it becomes clear that they
+are both heavily skewed to the left, especially in the case of the ICS data set.
 \sectiontitle{Perform the statistical test and interpret your results}{
 \label{sec:question5}
 Now, perform the statistical test and report your results.
