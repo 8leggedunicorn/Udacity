@@ -2,6 +2,7 @@
     \usepackage{graphicx} % Used to insert images
     \usepackage{adjustbox} % Used to constrain images to a maximum size 
     \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{float}
     \usepackage{enumerate} % Needed for markdown enumerations to work
     \usepackage{geometry} % Used to adjust the document margins
     \usepackage{amsmath} % Equations
@@ -331,7 +332,7 @@ In Figure \ref{fig:descriptive_data_describe} is printed the mean, sample standa
 and ICS samples, all values are in seconds. 
 \begin{figure}[ht]
   \centering
-  \input{data_describe}
+  \input{charts/data_describe}
   \caption{The source code for the table may be found:
     \href{https://github.com/8leggedunicorn/p1_stroop_effect/blob/master/p1_stroop_effect.py\#L1-L13}
         {p1\_stroop\_effect.py}.
@@ -383,7 +384,7 @@ even to the right of the mean.  This graph also explicitly shows that each
 subject takes a greater ICS time than their CCS time, there being no exceptions.
 \begin{figure}[ht]
   \centering
-  \includegraphics{bar_graph.pdf}
+  \includegraphics{figures/bar_graph.pdf}
   \caption{Bar graph of the time to complete the CCS and ICS list for each
     subject.  The subject is labled in order of their position in the original
     data, however the data is ordered by CCS time, from least to greatest.  The
@@ -399,20 +400,42 @@ subject takes a greater ICS time than their CCS time, there being no exceptions.
     \cite{Python-comprehension}}
   \label{fig:bar-graph-ccs-vs-ics-times}
 \end{figure}
-One might think naively especially in the case of the CCS descriptive statistics
-that both data sets show an evenly distributed nature, however looking at the
-two histogram graphs, one of the CCS and ICS results we see this is hardly the
-picture.  Please look to figures \ref{fig:ICS-histogram} to view such plots:
-\begin{figure}[ht]
+One might think naively especially in the case of the CCS descriptive
+statistics that both data sets show an evenly distributed nature, however
+looking at the two histogram graphs, figures \ref{fig:ICS-histogram} and
+figures \ref{fig:CCS-histogram}, it becomes very clear that both are heavily
+skewed to the left, with the two outliers on the right hand side for the ICS
+case increasing the standard deviation dramatically
+\begin{figure}[H]
   \centering
-  \includegraphics[scale=0.75]{histogram-ics}
+  \includegraphics[scale=0.75]{figures/histogram-ccs}
+  \caption{The graph above is a histogram of the CCS data.  Note how it is
+  skewed heavily to the left.  This is due to the two outliers with times
+  greater than $32s$.}
+  \label{fig:CCS-histogram}
+\end{figure}
+As the sample size is not too great, it doesn't even exceed the minimum rule of
+thumb of thirty, and as such the general shape of the distribution isn't
+obvious, nor is the Central Limit Theorem of use.  So over generalizing is a
+bit too easy at this point, however even after removing the outliers in the ICS
+case, please see \autoref{fig:ICS-no-outliers-histogram}, it is difficult to
+come to any definitvie conclusion about the distribution - only that the times
+are greater than the CCS data set.
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.75]{figures/histogram-ics}
   \caption{The graph above is a histogram of the ICS data.  Note how it is
   skewed heavily to the left.  This is due to the two outliers with times
   greater than $32s$.}
   \label{fig:ICS-histogram}
 \end{figure}
-At first glimpse of either of these two histograms it becomes clear that they
-are both heavily skewed to the left, especially in the case of the ICS data set.
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.75]{figures/histogram-ics-no-outliers}
+  \caption{The graph above is a histogram of the ICS data where the two
+  outliers whose times were greater than $32s$ have been removed.}
+  \label{fig:ICS-no-outliers-histogram}
+\end{figure}
 \sectiontitle{Perform the statistical test and interpret your results}{
 \label{sec:question5}
 Now, perform the statistical test and report your results.
@@ -425,5 +448,8 @@ Come to a conclusion in terms of the experiment task. Did the results match up w
   What do you think is responsible for the effects observed?
   Can you think of an alternative or similar task that would result in a similar
   effect?  Some research about the problem will be helpful for thinking about these two questions!}
-\printbibliography
+%%fakesection bibliography
+\printbibliography[keyword=Matplotlib, title={Matplotlib references}]
+\printbibliography[keyword=PANDAS , title={PANDAS references}]
+\printbibliography[keyword=Udacity , title={Udacity references}]
 \end{document}
