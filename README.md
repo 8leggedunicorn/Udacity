@@ -11,11 +11,11 @@ p1_stroop_effect.py -f # creates the figures
 p1_stroop_effect.py -c # creates the charts
 p1_stroop_effect.py -pdf # creates the PDF 
 ```
-# The project is meant to be built using the python 
-
 ## Personal scores on the Stroop test:
 
 * 11.169s congruent (color same to word)
 * 10.227s Incongruent (color different to word)
 
-Apparently priming has a demonstrable affect on this test for me although this doesn't appear to be the case for the greater population looking at the available data.
+Apparently priming has a demonstrable affect on this test for me although this
+doesn't appear to be the case for the greater population looking at the
+available data.

@@ -524,24 +524,35 @@ this method:
     import scipy.stats
     from math import sqrt
     stroopdata = pd.read_csv('stroopdata.csv')
-    print(scipy.stats.ttest_rel(stroopdata['Congruent'],stroopdata['Incongruent']))
-    (-8.020706944109957, 4.1030005857111781e-08)
+    ttest = scipy.stats.ttest_rel(stroopdata['Incongruent'],
+                                    stroopdata['Congruent'])
+    # As scipy.stats.ttest_rel calculates a two-tailed test to obtain the p value
+    # for the one-tailed test requires dividing this p value by 1/2, so for the
+    # one-tailed test:
+    print("(",ttest[0],",",ttest[1]*0.5,")")
+    ( 8.02070694411, 2.05150029286e-08 )
   \end{python}
-  \caption{Calculation of the two-tail correlated \textit{t} test shows that the
+  \caption{Calculation of the one-tail correlated \textit{t} test shows that the
   the null hypothesis should be rejected.  That is $\mu_{ICS} > \mu_{CCS}$. For
 syntax highlighting, as I'm using {pdf\LaTeX}, I used additional assistance from
 \cite{LaTeX-listings-python}.}
   \label{fig:reject-null-hypothesis}
 \end{figure}
-So to interpret the results.  The first number obtained,
-$-8.020706944109957$ is the \textit{t} value for the test and the second is the
-corresponding $p$ value.  That is the population mean, $\mu_{ICS}$ for the ICS
-data set is greater than the $\mu_{CCS}$ ( $\mathit{t} = -8.020706944109957$ at
-$p = 4.1030005857111781e-08$ ), an exceedingly unlikely occurrence, four in
+So to interpret the results.  First we are interested in the one-tail result.
+Note that as the \textit{t} Test assumes a symmetric distrobution the $p$ value of
+the one-tail test is simply half the value of the two tail test, while the
+\textit{t} remains unchanged.  So the first number, $8.02070694411,$ obtained in the last line of
+\autoref{fig:reject-null-hypothesis} is the \textit{t} value and the second of
+$2.05150029286e-08$ is the $p$ value for the one-tailed correlated
+\textit{t} Test.
+
+That is the population mean, $\mu_{ICS}$ for the ICS
+data set is greater than the $\mu_{CCS}$ ( $\mathit{t} = 8.020706944109957$ at
+$p = 2.05150029286e-08$ ), an exceedingly unlikely occurrence, roughly two in
 one-hundred million chance to occur if $\mu_{ICS}$ was in fact less than or
 equal to $\mu_{CCS}$.  Which means the test results points to $H_A$ being the
-only acceptable hypothesis to accept, with almost nill chance of a Type I
-error. 
+only reasonably acceptable hypothesis, with almost no chance of a Type I
+error occurring. 
 
 The quantative results matched up well with the descriptive and inferential
 statistics discussed in sections \autoref{sec:question3} and
