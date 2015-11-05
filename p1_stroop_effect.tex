@@ -327,7 +327,7 @@ samples.  Given the hypothesis devised above the single tail test will be used.
 Report some descriptive statistics regarding this dataset.
 Include at least one measure of central tendency and at least one measure of variability.}
 
-In Figure \ref{fig:descriptive_data_describe} is printed the mean, sample standard deviation, minimum values,
+In \autoref{fig:descriptive_data_describe} is printed the mean, sample standard deviation, minimum values,
 25th, 50th - median, 75th percentiles, and maximums for both the CCS
 and ICS samples, all values are in seconds. 
 \begin{figure}[ht]
@@ -373,7 +373,7 @@ the sample standard deviation:
 Provide one or two visualizations that show the distribution of the sample data.
 Write one or two sentences noting what you observe about the plot or plots.}
 
-Figure \ref{fig:bar-graph-ccs-vs-ics-times} points to the same ideas described
+\autoref{fig:bar-graph-ccs-vs-ics-times} points to the same ideas described
 in the descriptive statistics presented in the previous section. There are no
 real outliers for the CCS case, which shows up in the difference in the standard
 deviations of the two samples above, and that the mean and median for the CCS
@@ -402,8 +402,8 @@ subject takes a greater ICS time than their CCS time, there being no exceptions.
 \end{figure}
 One might think naively especially in the case of the CCS descriptive
 statistics that both data sets show an evenly distributed nature, however
-looking at the two histogram graphs, figures \ref{fig:ICS-histogram} and
-figures \ref{fig:CCS-histogram}, it becomes very clear that both are heavily
+looking at the two histogram graphs, \autoref{fig:ICS-histogram} and
+\autoref{fig:CCS-histogram}, it becomes very clear that both are heavily
 skewed to the left, with the two outliers on the right hand side for the ICS
 case increasing the standard deviation dramatically
 \begin{figure}[H]
@@ -415,12 +415,14 @@ case increasing the standard deviation dramatically
   \label{fig:CCS-histogram}
 \end{figure}
 As the sample size is not too great, it doesn't even exceed the minimum rule of
-thumb of thirty, and as such the general shape of the distribution isn't
-obvious, nor is the Central Limit Theorem of use.  So over generalizing is a
-bit too easy at this point, however even after removing the outliers in the ICS
-case, please see \autoref{fig:ICS-no-outliers-histogram}, it is difficult to
-come to any definitvie conclusion about the distribution - only that the times
-are greater than the CCS data set.
+thumb of thirty, and as such the shape of the population distribution isn't
+implied in the obviously left skewed sample distributions for both CCS and ICS,
+nor is the Central Limit Theorem to be relied upon given the sample size.  So
+over generalizing is a bit too easy at this point, however even after removing
+the outliers in the ICS case, please see
+\autoref{fig:ICS-no-outliers-histogram}, it is difficult to come to any
+definitvie conclusion about the distribution - only that the times are greater
+than the CCS data set.
 \begin{figure}[H]
   \centering
   \includegraphics[scale=0.75]{figures/histogram-ics}

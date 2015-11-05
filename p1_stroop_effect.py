@@ -251,14 +251,17 @@ if figures == True:
         print("file", Output,"already exists")
 
 if remove_trash:
+    import shutil
     def purge(dir, pattern):
         for file in os.listdir(dir):
             if re.search(pattern, file):
                 os.remove(os.path.join(dir, file))
                 print("removed",os.path.join(dir, file))
-        os.removedirs(chart_path)
-        print('removed',chart_path, 'directory')
-        os.removedirs(figures_path)
-        print('removed',figures_path, 'directory')
+        if os.path.isdir(chart_path):
+            shutil.rmtree(chart_path)
+            print('removed',chart_path, 'directory')
+        if os.path.isdir(figure_path):
+            shutil.rmtree(figure_path)
+            print('removed',figure_path, 'directory')
 
-    purge('.', ".*\.(aux\.*|aux|bbl|bcf|blg|log|pdf|out|run.xml|txt)")
+    purge('.', "(argparse|.*\.(aux\.*|aux|bbl|bcf|blg|log|pdf|out|run.xml|txt))")
