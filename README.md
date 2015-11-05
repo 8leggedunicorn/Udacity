@@ -2,8 +2,8 @@
 This is the first project for the Udacity nanodegree in data analysis.  
 
 To build the paper you will need a pretty full Python 3 distribution, for
-instance the [Anaconda](https://www.continuum.io/downloads) project using Python 3 will do, as well as a relatively
-complete TeX installation.
+instance the [Anaconda](https://www.continuum.io/downloads) project using
+Python 3 will do, as well as a relatively complete TeX installation.
 
 To build run the following commands:
 ```bash

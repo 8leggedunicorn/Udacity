@@ -1,7 +1,10 @@
 \documentclass{article}
     \usepackage{graphicx} % Used to insert images
     \usepackage{adjustbox} % Used to constrain images to a maximum size 
+    %\usepackage{color} % Allow colors to be defined
     \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{listings}
+    \usepackage{setspace}
     \usepackage{float}
     \usepackage{enumerate} % Needed for markdown enumerations to work
     \usepackage{geometry} % Used to adjust the document margins
@@ -36,6 +39,7 @@
       uniquelist=true]
     {biblatex}
     \usepackage{hyperref}
+    \renewcommand{\sectionautorefname}{\S}
     \addbibresource{udacity.bib}
     \definecolor{orange}{cmyk}{0,0.4,0.8,0.2}
     \definecolor{darkorange}{rgb}{.71,0.21,0.01}
@@ -254,6 +258,54 @@
 \vspace{1em}
 }
 
+\definecolor{Code}{rgb}{0,0,0}
+\definecolor{Decorators}{rgb}{0.5,0.5,0.5}
+\definecolor{Numbers}{rgb}{0.5,0,0}
+\definecolor{MatchingBrackets}{rgb}{0.25,0.5,0.5}
+\definecolor{Keywords}{rgb}{0,0,1}
+\definecolor{self}{rgb}{0,0,0}
+\definecolor{Strings}{rgb}{0,0.63,0}
+\definecolor{Comments}{rgb}{0,0.63,1}
+\definecolor{Backquotes}{rgb}{0,0,0}
+\definecolor{Classname}{rgb}{0,0,0}
+\definecolor{FunctionName}{rgb}{0,0,0}
+\definecolor{Operators}{rgb}{0,0,0}
+\definecolor{Background}{rgb}{0.98,0.98,0.98}
+
+\lstnewenvironment{python}[1][]{
+\lstset{
+numbers=left,
+numberstyle=\footnotesize,
+numbersep=1em,
+xleftmargin=1em,
+framextopmargin=2em,
+framexbottommargin=2em,
+showspaces=false,
+showtabs=false,
+showstringspaces=false,
+frame=l,
+tabsize=4,
+% Basic
+basicstyle=\ttfamily\small\setstretch{1},
+backgroundcolor=\color{Background},
+language=Python,
+% Comments
+commentstyle=\color{Comments}\slshape,
+% Strings
+stringstyle=\color{Strings},
+morecomment=[s][\color{Strings}]{"""}{"""},
+morecomment=[s][\color{Strings}]{'''}{'''},
+% keywords
+morekeywords={import,from,class,def,for,while,if,is,in,elif,else,not,and,or,print,break,continue,return,True,False,None,access,as,,del,except,exec,finally,global,import,lambda,pass,print,raise,try,assert},
+keywordstyle={\color{Keywords}\bfseries},
+% additional keywords
+morekeywords={[2]@invariant},
+keywordstyle={[2]\color{Decorators}\slshape},
+emph={self},
+emphstyle={\color{self}\slshape},
+%
+}}{}
+
 \begin{document}
 \maketitle
 \section*{Introduction}
@@ -278,11 +330,11 @@ and the project rubrick set forth in \cite{Udacity-P1-rubrick}.
 {
 \label{sec:question1}
 What is our independent variable? What is our dependent variable?}
-  incongruency between the color of a word, and the symantic meaning of the
+  incongruency between the color of a word, and the semantic meaning of the
   word.  As example the word {\color{red}`RED'} is a congruent example where the
   word `red' has the color of its semantic meaning, i.e. the color it
   represents, and {\color{green}`BLUE'} is an incongruent case where the word
-  `blue' which has the symantic meaning of the color blue is instead the color
+  `blue' which has the semantic meaning of the color blue is instead the color
   green. Frome here on out the terms congruent color selection, CCS, and
 incongruent color selection, ICS, will be used to denote the two conditions the
 dependent variable may take that of a word representing a color being colored
@@ -315,8 +367,10 @@ generalizability than expected or there are indeed real issues with it's
 veracity. So to sum things up via a set of equations:
 
 \begin{align}
-H_0:\; \mu_{ICS} \le \mu_{CCS} \\
-H_A:\; \mu_{ICS} > \mu_{CCS}
+  \label{eq:null_hypothesis}
+  H_0:\; \mu_{ICS} \le \mu_{CCS} \\
+  \label{eq:alternative_hypothesis}
+  H_A:\; \mu_{ICS} > \mu_{CCS}
 \end{align}
 As the two sets of data are correlated, the same subjects are used to take both
 the ICS and CCS tests, the proper test to use is a dependent t-test for paired
@@ -440,18 +494,138 @@ than the CCS data set.
 \end{figure}
 \sectiontitle{Perform the statistical test and interpret your results}{
 \label{sec:question5}
-Now, perform the statistical test and report your results.
-What is your confidence level and your critical statistic value?
-Do you reject the null hypothesis or fail to reject it?
-Come to a conclusion in terms of the experiment task. Did the results match up with your expectations?} 
+Now, perform the statistical test and report your results.  What is your
+confidence level and your critical statistic value?  Do you reject the null
+hypothesis or fail to reject it?  Come to a conclusion in terms of the
+experiment task. Did the results match up with your expectations?} 
 
+The test to be performed is a \textit{t} Test for Correlated Groups.  That is a
+test where the subjects of both groups remain the same and it's the independent
+variable CCS/ICS tests that distinguish one set of data from the other.  For
+guidance concerning which test to apply I referenced the fine research methods
+book \cite{jackson2011research}.  As stated in \autoref{sec:question2} I believe
+both one and two sided tests can legitimately be argued for, however if this is
+a test regarding the Stroop effect only the one tailed test defined by the
+hypothesi discussed again in \autoref{sec:question2} i.e.
+\autoref{eq:null_hypothesis} and \autoref{eq:alternative_hypothesis} are
+reasonable.  Both \autoref{sec:question3} and \autoref{sec:question4} point to a
+statistically significant difference between the two data sets, and in this
+section the math is performed to show this, and quantatatively to what extent.  
+
+I have used the SciPy package to calculate the \text{t} value
+\cite{Scipy-ttest-rel}.  Below are the calculations as well as the results to
+this method:
+\begin{figure}[H]
+  \centering
+  \begin{python}
+    import pandas as pd
+    import numpy as np
+    import scipy as sp
+    import scipy.stats
+    from math import sqrt
+    stroopdata = pd.read_csv('stroopdata.csv')
+    print(scipy.stats.ttest_rel(stroopdata['Congruent'],stroopdata['Incongruent']))
+    (-8.020706944109957, 4.1030005857111781e-08)
+  \end{python}
+  \caption{Calculation of the two-tail correlated \textit{t} test shows that the
+  the null hypothesis should be rejected.  That is $\mu_{ICS} > \mu_{CCS}$. For
+syntax highlighting, as I'm using {pdf\LaTeX}, I used additional assistance from
+\cite{LaTeX-listings-python}.}
+  \label{fig:reject-null-hypothesis}
+\end{figure}
+So to interpret the results.  The first number obtained,
+$-8.020706944109957$ is the \textit{t} value for the test and the second is the
+corresponding $p$ value.  That is the population mean, $\mu_{ICS}$ for the ICS
+data set is greater than the $\mu_{CCS}$ ( $\mathit{t} = -8.020706944109957$ at
+$p = 4.1030005857111781e-08$ ), an exceedingly unlikely occurrence, four in
+one-hundred million chance to occur if $\mu_{ICS}$ was in fact less than or
+equal to $\mu_{CCS}$.  Which means the test results points to $H_A$ being the
+only acceptable hypothesis to accept, with almost nill chance of a Type I
+error. 
+
+The quantative results matched up well with the descriptive and inferential
+statistics discussed in sections \autoref{sec:question3} and
+\autoref{sec:question4}.  The degree to which the null hypothesis must be
+rejected after looking at the results of this test paint the stark difference
+between these two data sets.
 \sectiontitle{Digging deeper and extending the investigation}{
 \label{sec:question6}
   What do you think is responsible for the effects observed?
   Can you think of an alternative or similar task that would result in a similar
   effect?  Some research about the problem will be helpful for thinking about these two questions!}
+
+There is a concise but equally inspired webpage that goes into the possible ways
+of viewing the Stroop effect, see \cite{Stroop-background}.  What follows I
+cannot take credit for and must rely on the previously cited reference.  They
+list three models explaining why the effect occurs: the automatic word
+recognition (AWR) model , speed of processing (SP) model, and a parallel
+distribued processing (PDP) model.  
+
+I will briefly describe these three models.  The AWR is the claim that humans
+are hard wired for language and in this case word recognition.  That is we are
+hard wired to process words in a certain manner, i.e. the meaning of a printed
+word takes prescedence over the color of the printed word.  The evidence for
+this model is due to the robust nature of the Stroop effect.  That the ICS
+sample always has a greater mean than the CCS sample, regardless of practice.
+That the use of color related words such as 'sky' or 'firetruck', to words that
+sound like color words such as 'wred' and 'bloo' all behave in accordance with
+the Stroop effect.  So the AWR model claims that in essence the Stroop effect is
+due to how humans process information.  That is we have a biological tendency to
+focus on, have a precedence for, semantic meaning over observable traits, like
+color.
+
+The SP model makes the claim that certain neural pathways are simply faster than
+others.  That the reading pathway is faster than the color processing pathway.
+As such it takes longer for the brain work out the conflicting messages and use
+the later arriving information regarding the color of the printed word over its
+semantic meaning.  This is a poor example but I will use it anyways.  Lightning
+to our eyes arrives faster than thunder to our ears.  This is due to the nature
+of the medium that the energy is passing through.  The metaphor breaks down
+quickly but it's an easy way of seeing the idea in practice.
+
+Finally the PDP model claims that it's not so much a matter of speed as in the
+SP model but a matter of the strengths of the cognitive pathways of each.  That
+is on the whole the pathway for reading is stronger and therefore takes
+presedence not because it arrives at the conscious decision making parts of our
+brain but because it makes more of an impact, so that in turn it requires more
+from us to focus in on the fainter observation of the color of the printed
+letters.
+
+The Wikipedia article on this subject \cite{Stroop-wikipedia}, is far more
+exhaustive in its description.  It discusses the possible biological basis of
+the phenomenon, and provides good research references.  Instead of parroting any
+further explication I will consider an experiment not in this article I thought
+would be interesting.
+
+While originally I thought up the experiement on my own a bit of searching found
+that research had naturally already pushed into this area
+\cite{Stroop-dyslexia}.  The only change to the normal Stroop effect would be to
+use experimental subjects all of whom had dyslexia, and a control of random but
+similarly aged readers.  It seems to me that likely the dyslexic would have an
+easier time saying the name of the color of a certain printed word over reading
+the word which if it occurred would violate the Stroop effect.  Studying the
+causes might hopefully shed light on why exactly the Stroop effect occurs, and
+provide more insight into dyslexia.  Oddly what the researchers found in the
+referenced study is however just the opposite to the one I naively 
+hypothesized.  Namely the children with dyslexia had an even more pronounced
+Stroop effect than normal readers in their age group.  
+
+What is obvious is that the continuous advances in technology should help in
+understanding what the basis is for the Stroop effect.  Another experiment is
+using a technology that isn't quite here but is a stone's throw away that of
+modern brain reading, or making correlations between uses of particular areas of
+the brain and our thoughts which in the last decade has really progressed
+immensly, see \cite{Brain-to-text} as an example.  Using this technology we
+would likely be able to see exactly where the extra time was coming from.  Then
+again if real mind reading becomes a reality in any practical sense it likely
+would have far greater reaching effects but it's something to look forward to.
+
 %%fakesection bibliography
-\printbibliography[keyword=Matplotlib, title={Matplotlib references}]
+\printbibliography[keyword=statistics , title={Statistics references}]
+\printbibliography[keyword=Matplotlib , title={Matplotlib references}]
+\printbibliography[keyword=SciPy , title={SciPy references}]
 \printbibliography[keyword=PANDAS , title={PANDAS references}]
 \printbibliography[keyword=Udacity , title={Udacity references}]
+\printbibliography[keyword=LaTeX , title={{pdf\LaTeX}  references}]
+\printbibliography[keyword=other , title={other references}]
 \end{document}
