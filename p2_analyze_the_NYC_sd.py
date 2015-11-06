@@ -66,12 +66,10 @@ if buildPdf:
     TeXInput='p2_analyze_the_NYC_sd.tex'
     BibInput = os.path.splitext(TeXInput)[0]
     TeXBin = '/home/yigal/.bin/pdflatex'
-    #PythonTexBin = '/home/yigal/.bin/pythontex'
     BibBin = '/home/yigal/.bin/biber'
 
     run_command(TeXBin, TeXInput)
     run_command(BibBin, BibInput)
-    #run_command(PythonTexBin, TeXInput)
     run_command(TeXBin, BibInput)
 
     TeXOutput=os.path.splitext(TeXInput)[0] + '.pdf'
