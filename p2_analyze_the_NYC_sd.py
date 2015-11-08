@@ -257,11 +257,18 @@ if remove_trash:
             if re.search(pattern, file):
                 os.remove(os.path.join(dir, file))
                 print("removed",os.path.join(dir, file))
-        if os.path.isdir(chart_path):
-            shutil.rmtree(chart_path)
-            print('removed',chart_path, 'directory')
-        if os.path.isdir(figure_path):
-            shutil.rmtree(figure_path)
-            print('removed',figure_path, 'directory')
+        dirs = [chart_path,
+                figure_path,
+                './_minted-p2_analyze_the_NYC_sd']
+        for dir in dirs:
+            if os.path.isdir(dir):
+                shutil.rmtree(dir)
+                print('removed',dir, 'directory')
+#        if os.path.isdir(chart_path):
+#            shutil.rmtree(chart_path)
+#            print('removed',chart_path, 'directory')
+#        if os.path.isdir(figure_path):
+#            shutil.rmtree(figure_path)
+#            print('removed',figure_path, 'directory')
 
     purge('.', "(argparse|.*\.(aux\.*|aux|bbl|bcf|blg|log|pdf|out|run.xml|txt))")
