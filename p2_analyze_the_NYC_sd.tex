@@ -1,5 +1,46 @@
 \documentclass{article}
-    \input{packages}
+%% Packages:
+    \usepackage{graphicx} % Used to insert images
+    \usepackage{adjustbox} % Used to constrain images to a maximum size 
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{setspace}
+    \usepackage{minted}
+    \newminted[mysql1]{mysql}{
+      mathescape,
+      linenos=true, 
+      texcl=true, 
+      bgcolor=Background
+      %gobble=2,
+    }
+
+    %\usepackage{listings}
+    \usepackage{float}
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations and \numberwithin command
+    \usepackage{amssymb} % Equations
+    \usepackage[T1]{fontenc}
+    \usepackage{mdframed}
+    \usepackage{newtxtext,newtxmath}
+    \usepackage[utf8]{inputenc} % Allow utf-8 characters in the tex document
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range 
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{tikz}
+    \usepackage{pgfplots}
+    \usepackage[]{ulem}
+    \pgfplotsset{compat=newest}
+    \usepackage{url}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage{ulem} % ulem is needed to support strikethroughs (\sout)
+    \usepackage{titlesec}
+    %\titleformat{\section}{\normalfont\Large\bfseries}{Question {\thesection}: }{1em}{}
+    \usepackage{hyperref}
+
     \renewcommand{\sectionautorefname}{\S}
     % Define a nice break command that doesn't care if a line doesn't already
     % exist.
@@ -12,10 +53,19 @@
     \title{Analyzing the NYC Subway Dataset}
     \author{Yigal Weinstein}
 
-    \makeatletter
-    % Prevent overflowing lines due to hard-to-break entities
     \sloppy 
-    % Slightly bigger margins than the latex defaults
+    \usepackage[
+      autocite=inline, 
+      backend=biber,
+      labeldate=true, 
+      refsegment=section,
+      uniquename=full,
+      defernumbers=true,
+      uniquelist=true]
+    {biblatex}
+    \addbibresource{udacity.bib}
+    \PassOptionsToPackage{unicode}{hyperref}
+    \PassOptionsToPackage{naturalnames}{hyperref}
     \hypersetup{pdfauthor={Yigal Weinstein},
       pdftitle={P2: Analyzing the NYC Subway Dataset},
       pdfsubject={data science, Udacity, MOOC},
@@ -32,10 +82,20 @@
       urlcolor={blue!80!black},
       breaklinks=true,  % so long urls are correctly broken across lines
     }           
- 
-\geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
-\input{header.tex}
 
+    \definecolor{Background}{rgb}{0.95,0.95,0.92}
+    %\geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+
+\makeatletter
+
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+  \newcommand{\ssection}[1]{
+\section*{#1}
+\addcontentsline{toc}{section}{\protect\numberline{}#1}
+}
 \newcounter{questionCtr}
 
 \newenvironment{question}{%      define a custom environment
@@ -46,11 +106,28 @@
    }{\par\bigskip}  %          create a vertical offset to following material
 \numberwithin{questionCtr}{section}
 
+\newcounter{problemCtr}
+
+\newenvironment{problem}{%      define a custom environment
+   \bigskip\noindent%         create a vertical offset to previous material
+   \refstepcounter{problemCtr}% increment the environment's counter
+   \textsc{Problem \theproblemCtr}% or \textbf, \textit, ...
+   \newline%
+   }{\par\bigskip}  %          create a vertical offset to following material
+\numberwithin{problemCtr}{section}
+
+\makeatother
+
 \begin{document}
 \maketitle
 \section*{Introduction}
 This project attempts to follow the outline provided in \cite{Udacity-P2-DS}
-and the project rubrick set forth in \cite{Udacity-P2-rubrick}.
+and the project rubrick set forth in \cite{Udacity-P2-rubrick}.  It is divided
+into two parts.  The first part, below, are answers to the short questions in
+\cite{Udacity-P2-DS} while the second part contains the code and and notes
+regarding problem set 2,3, and 4 of the Intro to Data Science course
+\cite{Udacity-data-science-course}.
+\part{Analyzing the NYC Subway Dataset}
 \section{Statistical Test}
 \label{sec:statistical_test_one}
 \begin{question}
@@ -195,7 +272,70 @@ including:
 %\printbibliography[keyword=Matplotlib , title={Matplotlib references}]
 %\printbibliography[keyword=SciPy , title={SciPy references}]
 %\printbibliography[keyword=PANDAS , title={PANDAS references}]
+\part{Code and Notes to Problem Sets 2,3 and 4 of \cite{Udacity-data-science-course}}
+\ssection{Problem Set 2: Wrangling Subway Data}
+
+% apparently the problems appear to have come from 
+% http://usa-da.blogspot.com/2014/06/data-wrangling-project-2-wrangle-nyc.html
+\begin{problem}
+Number of Rainy Days
+\end{problem}
+The SQL query I used was,
+
+\begin{mysql1}
+SELECT COUNT(rain) FROM weather_data WHERE rain > 0.0
+\end{mysql1}
+
+\begin{problem}
+  Temp on Foggy and Nonfoggy Days1 - Number of Rainy
+\end{problem}
+
+With the help of \cite{SQL-max} and \cite{Stackoverflow-sql-max} the following
+query provides the desired result:
+
+\begin{mysql1}
+SELECT fog, MAX(maxtempi) FROM weather_data GROUP BY fog
+\end{mysql1}
+
+\begin{problem}
+  Mean Temp on Weekends1 - Number of Rainy Days
+\end{problem}
+This one was extremely difficult as it required piecing together the hint about
+using the \verb|CAST()| function in references to data in more than one column
+as well as using the proper syntax to convert the \verb|date| column to the day
+of the week to allow filtering on Saturday and Sunday.  Another challenge was
+realizing that \verb|pandasql| isn't using \verb|SQL| per se but
+\hyperref{http://www.sqlite.org/lang_datefunc.html}{SQLite}, and in this
+particular case it matters because \verb|STRFTIME()| isn't something one will
+use in \verb|MySQL|, but for this purpose it appears like the only function to
+call. \cite{Python-strftime}  So continuing the research I found that SQLite
+stores stores in ISO format as a string. \cite{SQL-sqlite-datatypes},
+\cite{SQL-sqlite-date-time-functions}
+
+\begin{mysql1}
+SELECT AVG(CAST(meantempi AS INTEGER)) FROM weather_data WHERE
+    CAST(STRFTIME('%w',date) as integer) = 6 OR
+    CAST(STRFTIME('%w',date) as integer) = 0;
+\end{mysql1}
+
+\begin{problem}
+  Mean Temp on Rainy Days1 - Number of Rainy Days
+\end{problem}
+
+\begin{mysql1}
+SELECT AVG(CAST(mintempi AS INTEGER)) FROM weather_data WHERE
+    CAST(rain AS INTEGER) == 1 and
+    CAST(mintempi AS INTEGER) > 55; 
+\end{mysql1}
+No where near as challenging as the previous problem.
+
+\begin{problem}
+  
+\end{problem}
+\ssection{Problem Set 3: Analyzing Subway Data}
+\ssection{Problem Set 4: Visualizing Subway Data}
 \printbibliography[keyword=Udacity , title={Udacity references}]
+\printbibliography[keyword=SQL , title={SQL references}]
 %\printbibliography[keyword=LaTeX , title={{pdf\LaTeX}  references}]
 %\printbibliography[keyword=other , title={other references}]
 \end{document}
