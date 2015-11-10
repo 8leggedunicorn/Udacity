@@ -57,11 +57,14 @@ if buildPdf:
         command = Bin + ' ' + Input
         print( "running", command )
         p = os.popen( command, "r" )
+        output = ''
         while True:
             line = p.readline()
             if not line: break
-            print ( line )
-
+            #print ( line )
+            output += p.readline()
+            if not output: break
+        print ( output )
     # run TeX binary:
     TeXInput='p2_analyze_the_NYC_sd.tex'
     BibInput = os.path.splitext(TeXInput)[0]
@@ -264,11 +267,5 @@ if remove_trash:
             if os.path.isdir(dir):
                 shutil.rmtree(dir)
                 print('removed',dir, 'directory')
-#        if os.path.isdir(chart_path):
-#            shutil.rmtree(chart_path)
-#            print('removed',chart_path, 'directory')
-#        if os.path.isdir(figure_path):
-#            shutil.rmtree(figure_path)
-#            print('removed',figure_path, 'directory')
 
     purge('.', "(argparse|.*\.(aux\.*|aux|bbl|bcf|blg|log|pdf|out|run.xml|txt))")
