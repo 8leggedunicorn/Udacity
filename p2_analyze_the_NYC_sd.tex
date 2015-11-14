@@ -460,8 +460,61 @@ If the headers are assumed to be contained in the data set.  This took me more
 than a day to figure out.
 
 \begin{problem}
-  
+Get Hourly Entries 
 \end{problem}
+
+\begin{python1}
+import pandas
+
+def get_hourly_entries(df):
+    df['ENTRIESn_hourly'] = df.ENTRIESn - df.ENTRIESn.shift(1)
+    df.ENTRIESn_hourly = df.ENTRIESn_hourly.fillna(1)
+    return df
+\end{python1}
+
+\begin{problem}
+Get Hourly Exits
+\end{problem}
+Change ENTRIES to EXITS and 1 to 0 and presto chango:
+
+\begin{python1}
+import pandas
+
+def get_hourly_exits(df):
+    df['EXITSn_hourly'] = df.EXITSn - df.EXITSn.shift(1)
+    df.EXITSn_hourly = df.EXITSn_hourly.fillna(0)
+    return df
+\end{python1}
+
+This seems much easier than the previous problems:
+\begin{problem}
+Time to HourGet Hourly Exits
+\end{problem}
+
+\begin{python1}
+import pandas as pd
+
+def time_to_hour(time):
+    time = pd.to_datetime(time)
+    hour = time.hour
+    return hour  
+\end{python1}
+Datetimes are not trivial but this was an easy exercise showing some of the
+strengths of PANDAS, Numpy in regards to dealing with them.
+
+\begin{problem}
+Reformat Subway Dates
+\end{problem}
+
+\begin{python1}
+import datetime as dt
+
+def reformat_subway_dates(date):
+    date_string = dt.datetime.strptime(date, '%m-%d-%y')
+    date_formatted = dt.datetime.strftime(date_string, '%Y-%m-%d')
+    return date_formatted  
+\end{python1}
+
 \ssection{Problem Set 3: Analyzing Subway Data}
 \ssection{Problem Set 4: Visualizing Subway Data}
 \printbibliography[keyword=Python , title={Python references}]
