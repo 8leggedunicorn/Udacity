@@ -1,9 +1,0 @@
-listwise deletion
-pairwise deletion
-
-imputation - intelligent guess at missing values
-    * hard problem
-    * simple methods
-        * use mean of other data points
-            lessons correlations between altered variable
-        * use linear regression

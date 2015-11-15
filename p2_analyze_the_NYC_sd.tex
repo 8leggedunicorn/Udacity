@@ -78,7 +78,7 @@
       pdfsubject={data science, Udacity, MOOC},
       pdfkeywords={data science, statistics, probability, machine learning},
       pdfcreator={PdfLaTeX},
-      bookmarks={true},            %  A set of Acrobat bookmarks are written
+      %bookmarks={true},            %  A set of Acrobat bookmarks are written
       colorlinks={true},           %  Colors the text of links and anchors. 
       anchorcolor={black},         %  Color for anchor text.
       filecolor={cyan},            %  Color for URLs which open local files.
@@ -100,11 +100,11 @@
   \csname the#1\endcsname\quad
   \fi}
   \newcommand{\ssection}[1]{
+\phantomsection
 \section*{#1}
-\addcontentsline{toc}{section}{\protect\numberline{}#1}
-}
-\newcounter{questionCtr}
+\addcontentsline{toc}{section}{\protect\numberline{}#1}}
 
+\newcounter{questionCtr}
 \newenvironment{question}{%      define a custom environment
    \bigskip\noindent%         create a vertical offset to previous material
    \refstepcounter{questionCtr}% increment the environment's counter
@@ -279,7 +279,9 @@ including:
 %\printbibliography[keyword=Matplotlib , title={Matplotlib references}]
 %\printbibliography[keyword=SciPy , title={SciPy references}]
 %\printbibliography[keyword=PANDAS , title={PANDAS references}]
-\part{Code and Notes to Problem Sets 2,3 and 4 of \cite{Udacity-data-science-course}}
+\part{Code and Notes to Problem Sets 2,3 and 4}
+What follows are my solutions to problem sets 2,3, and 4 of
+\cite{Udacity-data-science-course}.
 \ssection{Problem Set 2: Wrangling Subway Data}
 
 % apparently the problems appear to have come from 
@@ -430,16 +432,18 @@ actually does work, because the entries for the last two columns for the output
 are always, that is no matter if the 'correct' answer is given or the inccorect
 is shown incorrectly with padded zeros, as example,
 
+{\footnotesize
 \begin{verbatim}
 your output:
-       C/A  UNIT       SCP     DATEn     TIMEn    DESCn   ENTRIESn                                             EXITSn
-0     A002  R051  02-00-00  05-01-11  00:00:00  REGULAR  003144312                                          001088151
-1     A002  R051  02-00-00  05-01-11  04:00:00  REGULAR  003144335                            001088159      
-\end{verbatim}
+       C/A  UNIT       SCP     DATEn     TIMEn    DESCn   ENTRIESn                     EXITSn
+0     A002  R051  02-00-00  05-01-11  00:00:00  REGULAR  003144312                 001088151
+1     A002  R051  02-00-00  05-01-11  04:00:00  REGULAR  003144335               001088159      
+\end{verbatim}}
 It makes sense if the header in the CSV files is taken into data frame that
-columns normally of \verb|int(32|64)?| would be forced to be treated as an
-object, however the output, shown above doesn't indicate that the first row
-should be treated as a header, just the opposite in fact.
+columns normally of \verb|int| would be forced to be treated as an
+\verb|object|, however the output, shown above doesn't indicate that the first
+row should be treated as a header, just the opposite in fact, and I have no
+explanation for all of the extra space in the last two columns.
 
 The only test that shows this to be the case is that
 \verb|print(turnstile_data.dtypes)| shows up properly as,
@@ -487,6 +491,7 @@ def get_hourly_exits(df):
 \end{python1}
 
 This seems much easier than the previous problems:
+
 \begin{problem}
 Time to HourGet Hourly Exits
 \end{problem}
@@ -499,12 +504,15 @@ def time_to_hour(time):
     hour = time.hour
     return hour  
 \end{python1}
+
 Datetimes are not trivial but this was an easy exercise showing some of the
 strengths of PANDAS, Numpy in regards to dealing with them.
 
 \begin{problem}
 Reformat Subway Dates
 \end{problem}
+Using the \verb|datetime| module the functions \verb|strftime()| and
+\verb|strptime()| are used to the solve this problem, \cite{Python-strftime}:
 
 \begin{python1}
 import datetime as dt
@@ -516,6 +524,86 @@ def reformat_subway_dates(date):
 \end{python1}
 
 \ssection{Problem Set 3: Analyzing Subway Data}
+
+% Shapiro-Wilk Test
+% w,p = scipy.stats.shapiro(data)
+
+% non-parametric test - stat test doesn't assume data is drawn from any
+% particular underlying prob. distrobution.   example being Mann-Whitney u test:
+% 
+% u,p = scipy.stats.mannwhitney(x,y)
+\begin{problem}
+Exploratory Data Analysis  
+\end{problem}
+
+
+\begin{python1}
+import numpy as np
+import pandas
+import matplotlib.pyplot as plt
+
+def entries_histogram(turnstile_weather):
+    plt.figure()
+    turnstile_weather[turnstile_weather.rain == 1].ENTRIESn_hourly.
+        plot(kind='hist', alpha=0.5)
+    turnstile_weather[turnstile_weather.rain == 0].ENTRIESn_hourly.
+        plot(kind='hist', alpha=0.5)
+    return plt
+\end{python1}
+
+\begin{problem}
+Welch's t-Test
+\end{problem}
+
+The data set isn't normally distributed and is tremendously skewed to the left.
+As such Welch's t-test wouldn't be a useful test for determining relevant
+statistical inforation from the data.  While the sample size is greater than
+what Scipy can handle properly $N < 5000$ we can see that it's very
+unlikely, using the Shapiro-Wilk test, that the data was drawn from normal
+distributions:
+
+\begin{python1}
+import scipy.stats as stats
+print(stats.shapiro(turnstile_weather[turnstile_weather.rain 1].ENTRIESn_hourly))
+print(stats.shapiro(turnstile_weather[turnstile_weather.rain 0].ENTRIESn_hourly))
+(0.47159135341644287, 0.0)
+(0.47661787271499634, 0.0)
+\end{python1}
+
+\begin{problem}
+Mann-Whitney U-Test 
+\end{problem}
+
+I used the following somewhat verbose code for this problem:
+
+\begin{python1}
+import numpy as np
+import scipy
+import scipy.stats
+import pandas
+
+def mann_whitney_plus_means(turnstile_weather):
+    with_rain = turnstile_weather[turnstile_weather.rain == 1].ENTRIESn_hourly
+    with_rain_mean = with_rain.mean()
+    without_rain = turnstile_weather[turnstile_weather.rain == 0].ENTRIESn_hourly
+    without_rain_mean = without_rain.mean()
+    
+    stats = scipy.stats.mannwhitneyu(with_rain, without_rain)
+    U = stats[0]
+    p = stats[1]
+
+    return with_rain_mean, without_rain_mean, U, p # leave this line for the grader
+\end{python1}
+
+The results found were, $U,p = 1924409167.0, 0.024999912793489721$ where the
+average \verb|ENTRIESn_hourly| were found to be $1105.4463767458733,
+1090.278780151855$ for rainy and non-rainy days respectively.
+
+As $p < 0.05$ it is quite likely that the two distributions, although having
+fairly similar means are in fact from two distinct populations, that is they are
+statistically different.
+
+
 \ssection{Problem Set 4: Visualizing Subway Data}
 \printbibliography[keyword=Python , title={Python references}]
 \printbibliography[keyword=SQL , title={SQL references}]

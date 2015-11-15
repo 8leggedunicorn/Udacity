@@ -68,7 +68,8 @@ if buildPdf:
     # run TeX binary:
     TeXInput='p2_analyze_the_NYC_sd.tex'
     BibInput = os.path.splitext(TeXInput)[0]
-    TeXBin = '/home/yigal/.bin/pdflatex -shell-escape'
+    #TeXBin = '/home/yigal/.bin/pdflatex -shell-escape --interaction=nonstopmode'
+    TeXBin = '/home/yigal/.bin/pdflatex -shell-escape' 
     BibBin = '/home/yigal/.bin/biber'
 
     run_command(TeXBin, TeXInput)

@@ -144,3 +144,7 @@ sympy-plots-for-*.tex/
 
 # Vim
 *.swp
+
+# Jupyter/IPython checkpoint dir
+.ipynb_checkpoints/
+.ipynb_checkpoints/**

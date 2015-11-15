@@ -25,3 +25,5 @@ Venn Diagram of necessary data science skills:
  * Caveat Data scientists often work in teams so while substantive knowledge is
  important having less subject knowledge can often times be mitigated by
  divvying out tasks to those who are best able to complete them.
+
+
