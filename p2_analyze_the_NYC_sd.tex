@@ -603,11 +603,76 @@ As $p < 0.05$ it is quite likely that the two distributions, although having
 fairly similar means are in fact from two distinct populations, that is they are
 statistically different.
 
+\begin{problem}
+  Plotting Residuals
+\end{problem}
+
+Using \cite{nist-residuals} to understand the ideas behind plotting residuals.
+From the errors generated it appears there are some severe outliers, meaning for
+some parts of the data the model did badly, even atrociously.
+
+\begin{python1}
+import numpy as np
+import scipy
+import matplotlib.pyplot as plt
+
+def plot_residuals(turnstile_weather, predictions):
+    plt.figure()
+    (turnstile_weather['ENTRIESn_hourly'] - predictions).hist()
+    return plt
+\end{python1}
+
+\begin{problem}
+Compute $R^2$
+\end{problem}
+
+\begin{python1}
+import numpy as np
+import scipy
+import matplotlib.pyplot as plt
+import sys
+
+def compute_r_squared(data, predictions):
+    ave = np.mean(data)
+    SStot = np.dot(data - ave,data - ave)
+    SSres = np.dot(data - predictions, data - predictions)
+    r_squared = 1 - SSres/SStot    
+    #print(type(features))
+    
+    return r_squared
+\end{python1}
+
+Instead of using \verb|np.mean| or \verb|np.sum| it was simply easier to use the
+dot product \verb|np.dot| to produce the desired result, \cite{Numpy-dot}.
+
+\begin{problem}
+  Gradient Descent (optional)
+\end{problem}
+
+So using the official documentation on utilizing
+\verb|sklearn.linear_model.SGDRegressor| \cite{scikit-learn-SGDRegressor}.  This
+was not a brilliantly done job here is my code,
+
+\begin{python1}
+def linear_regression(features, values):
+    """
+    Perform linear regression given a data set with an arbitrary number of features.
+    """    
+
+    clf = SGDRegressor(alpha=0.025,n_iter=20)
+    clf.fit(features, values)
+    intercept = clf.intercept_[0]
+    params = clf.coef_
+    
+    return intercept, params
+\end{python1}
 
 \ssection{Problem Set 4: Visualizing Subway Data}
 \printbibliography[keyword=Python , title={Python references}]
 \printbibliography[keyword=SQL , title={SQL references}]
 \printbibliography[keyword=Udacity , title={Udacity references}]
 %\printbibliography[keyword=LaTeX , title={{pdf\LaTeX}  references}]
+\printbibliography[keyword=statistics , title={Statistics references}]
+\printbibliography[keyword=machine.learning, title={Machine Learning references}]
 \printbibliography[keyword=other , title={other references}]
 \end{document}
