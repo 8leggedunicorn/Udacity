@@ -668,11 +668,70 @@ def linear_regression(features, values):
 \end{python1}
 
 \ssection{Problem Set 4: Visualizing Subway Data}
+
+\begin{problem}
+  Visualization I
+\end{problem}
+
+I was having difficulty understanding how to use use multiple data frames and
+this is where I found a solution \cite{stackoverflow-ggplot-multiple-df}.  I
+also used the official documentation/examples to produce the graph below,
+\cite{ggplot-python-docs} note there is much improvement I can see doing but
+it's something but I learned quite a lot doing it.  I'm not impressed with the
+Python implementation of ggplot and can see that the original is a far more
+refined tool in R:
+
+\begin{python1}
+from pandas import *
+from ggplot import *
+
+def plot_weather_data(turnstile_weather):
+    
+    hour_mean = turnstile_weather.groupby('Hour', as_index=False).mean()
+    hour_median = turnstile_weather.groupby('Hour', as_index=False).median()
+    title = "Entries per hour from the 1st to the 30th of May 2011 "
+    xlable = "Hour"
+    ylable = "Entries per hour"
+
+    plot = ggplot(aes(x='Hour', y='ENTRIESn_hourly'), data=turnstile_weather) + \
+    geom_point(aes(x='Hour', y= 'ENTRIESn_hourly', size=100, alpha=0.1), color='steelblue') + \
+    geom_point(color='yellow', data=hour_mean) + \
+    geom_point(color='black', data=hour_median) + \
+    scale_color_gradient2() + \
+    xlab(xlable) + ylab(ylable) + ggtitle(title) + \
+    ylim(0,4000) + xlim(-.3,24)
+    
+    return plot
+\end{python1}
+
+Where I was unable to associate a legend but the output is as follows:
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{entries_per_hour.png}
+  \caption{Each semi-transparent dot represents a point of data graphed for each
+    hour in respect to the number of entries per hour rate.  All outliers
+    greater than $4,000$  were left out of the plot in order to provide a more
+    meaningful view of the population.  The average and median values are
+    represented by the yellow and black dots respectively, and use all values
+    including above the $4,000$ level.  Note how even here most of the average
+    values are much below $500$ and that there are at least two distinct peaks
+  at 12PM and 8PM.}
+  \label{fig:bar-graph-ccs-vs-ics-times}
+\end{figure}
+
+
+
 \printbibliography[keyword=Python , title={Python references}]
 \printbibliography[keyword=SQL , title={SQL references}]
 \printbibliography[keyword=Udacity , title={Udacity references}]
 %\printbibliography[keyword=LaTeX , title={{pdf\LaTeX}  references}]
 \printbibliography[keyword=statistics , title={Statistics references}]
 \printbibliography[keyword=machine.learning, title={Machine Learning references}]
+\printbibliography[keyword=ggplot , title={ggplot references}]
 \printbibliography[keyword=other , title={other references}]
+% 400 billion gallons of water California is roughly 10% of the population
+% 20 million
+% 100-200 ~ 2-4 bgd 
+% ~40 bgd 
 \end{document}
