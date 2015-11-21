@@ -123,6 +123,8 @@
    }{\par\bigskip}  %          create a vertical offset to following material
 \numberwithin{problemCtr}{section}
 
+\@addtoreset{section}{part}
+
 \makeatother
 
 \begin{document}
@@ -280,9 +282,11 @@ including:
 %\printbibliography[keyword=SciPy , title={SciPy references}]
 %\printbibliography[keyword=PANDAS , title={PANDAS references}]
 \part{Code and Notes to Problem Sets 2,3 and 4}
+\setcounter{section}{1}
 What follows are my solutions to problem sets 2,3, and 4 of
 \cite{Udacity-data-science-course}.
-\ssection{Problem Set 2: Wrangling Subway Data}
+\section{Problem Set 2: Wrangling Subway Data}
+%\ssection{Problem Set 2: Wrangling Subway Data}
 
 % apparently the problems appear to have come from 
 % http://usa-da.blogspot.com/2014/06/data-wrangling-project-2-wrangle-nyc.html
@@ -523,7 +527,8 @@ def reformat_subway_dates(date):
     return date_formatted  
 \end{python1}
 
-\ssection{Problem Set 3: Analyzing Subway Data}
+%\ssection{Problem Set 3: Analyzing Subway Data}
+\section{Problem Set 3: Analyzing Subway Data}
 
 % Shapiro-Wilk Test
 % w,p = scipy.stats.shapiro(data)
@@ -667,7 +672,8 @@ def linear_regression(features, values):
     return intercept, params
 \end{python1}
 
-\ssection{Problem Set 4: Visualizing Subway Data}
+%\ssection{Problem Set 4: Visualizing Subway Data}
+\section{Problem Set 4: Visualizing Subway Data}
 
 \begin{problem}
   Visualization I
@@ -721,6 +727,70 @@ Where I was unable to associate a legend but the output is as follows:
 \end{figure}
 
 
+\begin{problem}
+  Visualization II
+\end{problem}
+
+I decided to just do a variation on the same theme as the previous
+visualization.  This time, however, I've taken the top 6 stations in respect to
+the total number of colors needed for representation and plotted their data with
+respect to the hours.  What is of note is that it appears many stations are
+often times nearly unused for several hours
+
+\newpage
+
+\begin{mdframed}[linecolor=black, topline=true, bottomline=true,
+  leftline=false, rightline=false]
+\footnotesize
+\begin{python1}
+from pandas import *
+from ggplot import *
+
+def plot_weather_data(turnstile_weather):
+    # Get sorted list of stations by the sum of ENTRIESn: 
+    by_unit = turnstile_weather.loc[:,['ENTRIESn_hourly' , 'UNIT']]
+    by_unit = by_unit.groupby('UNIT').sum()
+    by_unit = by_unit.sort_values('ENTRIESn_hourly',ascending = False)
+
+    # Filter stations with at least 1/3 of the largest data point:
+    by_unit_cut = by_unit[by_unit > by_unit.iloc[0]/3]
+    # PANDAS is nice enough to keep the original df structure so drop NaN
+    # values:
+    by_unit_cut = by_unit_cut.dropna()
+
+    # reduce total number of stations to 6, 
+    # too messy to see much of anything without minimizing this number
+    if by_unit_cut.count()[0] > 6: 
+        by_unit_cut = by_unit_cut[0:6]
+
+    # Use the generated list to filter out all of the data from the origial
+    # data frame:    
+    by_unit_data = turnstile_weather.loc[turnstile_weather['UNIT']
+    by_unit_data = by_unit_data.isin(by_unit_cut.index.tolist())]
+
+    # Now generate a similar plot as above using a different colors for the 11 
+    # stations considered:
+
+    by_unit_data = by_unit_data[['UNIT','ENTRIESn_hourly','Hour']]
+    by_unit_data = by_unit_data.sort_values('Hour')
+    by_unit_data = by_unit_data.groupby(['UNIT','Hour'], \
+        as_index=False).sum()
+    
+    title = \
+    "Entries per hour from the top 6 Stations during May 2011 1st through 30th"
+    xlable = "Hour"
+    ylable = "Entries per hour"
+
+    plot = ggplot(by_unit_data, + \
+        aes(x='Hour', y='ENTRIESn_hourly', color='UNIT')) + \
+        geom_point(size=100) + \
+        geom_point() + \
+        xlab(xlable) + ylab(ylable) + ggtitle(title) + \
+        xlim(-.3,24) + ylim(0,400000)
+
+    return plot
+\end{python1}
+\end{mdframed}
 
 \printbibliography[keyword=Python , title={Python references}]
 \printbibliography[keyword=SQL , title={SQL references}]
