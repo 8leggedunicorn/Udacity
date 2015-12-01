@@ -280,18 +280,24 @@ The feature list is as follows,
 
 \begin{python1}
     feature_list = [
+                    'hour',
                     'day_week',
-                    'fog',
-                    'hour', 
+                    'weekday',
                     'latitude',
                     'longitude',
-                    'meantempi', 
-                    'meanwspdi', 
-                    'precipi'
-                    'rain', 
+                    'fog',
+                    'precipi',
+                    'pressurei',
+                    'rain',
                     'tempi',
-                    'wspdi', 
-                   ]
+                    'wspdi',
+                    'meanprecipi',
+                    'meanpressurei',
+                    'meantempi',
+                    'meanwspdi',
+                    'weather_lat',
+                    'weather_lon'
+                    ]
     features = dataframe[feature_list]
     dummy_units = pandas.get_dummies(dataframe['UNIT'], prefix='unit')
     features = features.join(dummy_units)
@@ -315,15 +321,15 @@ That is the feature list is as follows, 'day\_week, fog, hour, latitude, longitu
   \end{itemize}
 \end{question}
 Initially the entire decision was based off of the value of $R^2$ value produced
-as compared to before the feature was added.  If $R^2$ was greater upon adding
-the feature I'd keep the feature, and if it was lower I'd remove it.  I changed
-to partially automating it by running through all of the possible subsets that
-could be made and selecting the largest $R^2$ value.  Then the feature list
-obtained like its parent, and so on until a maximum value was found or the
-number of features fell to seven, a semi-random cut off point.  I'm not certain
-if I gained all that much but it was a good exercise.  Here is the code, I've
-used mostly the exercise code removing the comments and adding a few functions
-for the automation,
+as compared to a more sparse feature set's $R^2$ value.  If $R^2$ was greater
+upon adding the feature I'd keep the feature, and if it was lower I'd remove it.
+I changed to partially automating it by running through all of the possible
+subsets that could be made and selecting the largest $R^2$ value.  Then the
+feature list obtained like its parent, and so on until a maximum value was found
+or the number of features fell to seven, a semi-random cut off point.  I'm not
+certain if I gained all that much but it was a good exercise.  Here is the code,
+I've used mostly the exercise code removing the comments and adding a few
+functions for the automation,
 
 \begin{python1}
 import numpy as np
@@ -602,6 +608,20 @@ depicted in the figure.
     the variability in the two samples.
 \end{itemize}
 \end{question}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{histogram-rainy-norain.pdf}
+  \caption{The above histograms have been normed which highlights the similarity
+    between the two sets of data.  That is rainy and non-rainy days are very
+    similarly distributed.  There were some outliers on both graphs.  To show
+    the general trend of the graphs I chose to limit the points used to the
+    $95\%$ cutoff, using the larger of the two cutoff points which in this case
+    was for non-rainy days at roughly $7,400$ as the $x$-max value, instead of
+    the maximum value of both sets which is more than four times that value, for
+  rainy it is roughly $33,000$ and non-rainy $32,000$.}
+\label{fig:histo-entries_hourly}
+\end{figure}
 
 \begin{question}
   One visualization can be more freeform. You should feel free to implement
