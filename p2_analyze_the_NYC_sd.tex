@@ -614,12 +614,14 @@ depicted in the figure.
   \includegraphics[width=\textwidth]{histogram-rainy-norain.pdf}
   \caption{The above histograms have been normed which highlights the similarity
     between the two sets of data.  That is rainy and non-rainy days are very
-    similarly distributed.  There were some outliers on both graphs.  To show
-    the general trend of the graphs I chose to limit the points used to the
-    $95\%$ cutoff, using the larger of the two cutoff points which in this case
-    was for non-rainy days at roughly $7,400$ as the $x$-max value, instead of
-    the maximum value of both sets which is more than four times that value, for
-  rainy it is roughly $33,000$ and non-rainy $32,000$.}
+    similarly distributed, although there are considerably fewer rainy days so
+    looking at the raw data hisograms this is much less obvious.  There were
+    some outliers on both graphs.  To show the general trend of the graphs I
+    chose to limit the points used to the $95\%$ cutoff, using the larger of the
+    two cutoff points which in this case was for non-rainy days at roughly
+  $7,400$ as the $x$-max value, instead of the maximum value of both sets which
+is more than four times that value, roughly $33,000$ and $32,000$ for rainy and
+non-rainy respectfully.}
 \label{fig:histo-entries_hourly}
 \end{figure}
 
@@ -634,6 +636,28 @@ depicted in the figure.
   \end{itemize}
 \end{question}
 
+Please look to \autoref{fig:bar-graph-ccs-vs-ics-times} for the second
+visualization for this section.  I used the in built PANDAS visualization
+functions, which in turn is utilizing Matplotlib, see
+\cite{PANDAS-visualization} which goes into detail how quite aesthetically
+pleasing visualizations can be constructed using a GGplot like environment
+implemented in Matplotlib, as well as providing a reference for creating a
+stacked bar graph from a data frame.  I used the following other references to
+construct this visualization \cite{Stackoverflow-pandas-savefig},
+\cite{PANDAS-index-select-data},
+\cite{Stackoverflow-pandas-filter-multiple-columns}, \cite{PANDAS-data-frame}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{bar-days-of-week-rainy.pdf}
+  \caption{The above bar graph shows the sum of the ridership divided into the
+    days of week, and each day's values has been partitioned into being either
+    rainy or non-rainy days.  There is a drastic dip in subway usage during the
+    weekends, more rain fell on Wednesday by far then any other day, and there are
+    significantly more passengers that ride the subway on Tuesday than any other
+  weekday.}
+\label{fig:bar-days-of-week-rainy}
+\end{figure}
 \section{Conclusion}
 Please address the following questions in detail. Your answers should be 1-2
 paragraphs long.
