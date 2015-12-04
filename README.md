@@ -5,7 +5,8 @@
 
 ## Build from Source
 
-**__The script is currently broken as it was taken from P1 and needs additional work to be used with P2.  More work needs to be used to transfer the IPython notebooks to Python code so that automation can work.__**
+**__The script is currently broken as it was taken from P1 and needs additional work for use with P2.  More work needs to be done to transfer the IPython notebooks to Python code for proper automation.__**
+
 To build the paper you will need a pretty full Python 3 distribution, for
 instance the Anaconda project using Python 3 will do, as well as a relatively
 complete TeX installation.
