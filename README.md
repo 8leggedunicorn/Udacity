@@ -1,5 +1,11 @@
-This is the second project for the Udacity nanodegree in data analysis.
+## To Udacity Staff
+  * This is a repository for the old P2 project: Analyze the NYC Subway Dataset.
+  * The PDF file 'p2_analyze_the_NYC_sd.pdf' is the completed project.
+  * There was a corruption with the BibTex database at roughly 3:33PM CST December 4th, if you clone the project earlier than this please update.
 
+## Build from Source
+
+**__The script is currently broken as it was taken from P1 and needs additional work to be used with P2.  More work needs to be used to transfer the IPython notebooks to Python code so that automation can work.__**
 To build the paper you will need a pretty full Python 3 distribution, for
 instance the Anaconda project using Python 3 will do, as well as a relatively
 complete TeX installation.
