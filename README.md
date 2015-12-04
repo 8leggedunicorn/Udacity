@@ -27,3 +27,22 @@ Venn Diagram of necessary data science skills:
  divvying out tasks to those who are best able to complete them.
 
 
+sd.py -c # creates the charts
+p2_analyze_the_NYC_sd.py -pdf # creates the PDF 
+```
+
+## Skill set needed to become a data scientist:
+Venn Diagram of necessary data science skills:
+ * Hacking Skills
+ * Math & Statistics Knowledge
+ * Substantive Expertise
+
+## Describe 'substantive expertise' by the following:
+ * Knows which questions to ask.
+ * Can interpret the data well.
+ * Understand the structure of the data.
+ * Caveat Data scientists often work in teams so while substantive knowledge is
+ important having less subject knowledge can often times be mitigated by
+ divvying out tasks to those who are best able to complete them.
+
+
