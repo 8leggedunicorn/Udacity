@@ -30,7 +30,8 @@
     \usepackage{mdframed}
     \usepackage{newtxtext,newtxmath}
     \usepackage[utf8]{inputenc} % Allow utf-8 characters in the tex document
-    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    %\usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{verbatim} % verbatim replacement that allows latex
     \usepackage{grffile} % extends the file name processing of package graphics 
                          % to support a larger range 
     % The hyperref package gives us a pdf with properly built
@@ -143,7 +144,10 @@ regarding problem set 2,3, and 4 of the Intro to Data Science course
   Which statistical test did you use to analyze the NYC subway data? Did you use
   a one-tail or a two-tail P value? What is the null hypothesis? What is your
   p-critical value?
+  \label{q:one}
 \end{question}
+
+\begin{comment}
 There appears to be an implicit requirement that we are to select a feature (or
 set of features), and generate a null hypothesis regarding the feature, although
 it doesn't appear to be explicitly stated as subsequent questions in this
@@ -157,26 +161,40 @@ section request,
 This wouldn't make sense if the goal was to determine if the sample distribution
 conformed to a normal distribution, as there wouldn't be two means to compare,
 just a single one of the sample.  So I've arbitarily chosen to compare the
-distribution of entries on the weekend to that of the weekdays.
-
-
+distribution of entries on the weekend to that of the weekdays.  I've had to
+update this section as further reading of the questions indicate that what is
+meant to be compared is the rainy vs. non-rainy days.  I realize that this is no
+longer an active course and I may be the only one who didn't initially
+understand the questions but it would've been very appreciated if instead of
+asking general questions but interested in a particular answers you asked the
+desired questions initially.
+\end{comment}
 The distribution of \verb|ENTRIESn_hourly| isn't normal if we look at the
-entirety of it, see the answer to the next question for my rational .  In
-general a comparison test requires two different data samples to compare, which
-means choosing at least one feature to generate a pair of disjoint sets.  In
-this example I will compare the data for weekdays (WD) to weekends (WE).  The
-null hypothesis, $H_0$ is that the two samples come from the same distribution.
+entirety of it, see the answer to the next question for my rational.  In this
+example I will compare the distribution of \verb|ENTRIESn_hourly| for rainy and
+non-rainy days where the overall distribution is considered nonparametric.  The
+null hypothesis, $H_0$ is that the two samples come from the same population.
 While the alternative hypothesis, $H_A$ is that the sample sets come from two
-different populations. While the CLT certainly pertains to this data set I will
-use both the two-sided Kolmogorov-Smirnov statistic
-\cite{Scipy-Kolmogorov-Smirnov} as well as the one-sided
-Mann-Whitney rank test, \cite{Scipy-mannwhitney} both of which are for
-non-parametric independent samples.
+different populations.  For this test I will use a p-critical value, $p$, of
+$0.05$:
+
+\begin{equation}
+  p = 0.05
+  \label{eq:p-critical-value}
+\end{equation}
+
+While the Central Limit Theorem on a data set of this size is potentially a
+reasonable choice I have chosen two nonparametric continuous tests to test
+$H_0$, the two-sample Kolmogorov-Smirnov two sided test
+\cite{Scipy-Kolmogorov-Smirnov} and the Mann-Whitney U one sided test
+\cite{Scipy-mannwhitney}.  
+
 
 \begin{question}
   Why is this statistical test applicable to the dataset? In particular,
   consider the assumptions that the test is making about the distribution of
   ridership in the two samples.
+  \label{q:test-applicability}
 \end{question}
 It is often useful to determine how well a sample conforms to a normal
 distribution to determine the appropriate statistical tests to be applied to it.
@@ -196,7 +214,7 @@ variable of interest is
     normalized comparing it to a normal distribution with the same mean and
     standard deviation.  The following were used to generate this plot
     \cite{PANDAS-visualization} and \cite{Stackoverflow-histogram-with-normal}.}
-  \label{fig:histo-entries_hourly}
+  \label{fig:histo-entries_hourly-prob-set}
 \end{figure}
 The histogram indicates that the data is certainly not normal, and it is heavily
 skewed to the left.  The lack of normality can also be seen by performing a
@@ -220,42 +238,61 @@ test.  Even though the distribution of the total sample isn't normal we could
 use the CLT to make some educated gueses in regards to comparing the similarity
 of our two samples, however if one looks at \autoref{fig:histo-entries_hourly}
 the jarring differences between the approximate normal and the actual
-distribution becomes very clear.  As a result I will use a non-parametric test
-for testing the hypotheses.
+distribution becomes very clear.  While normal tests are incredibly robust I
+will use the nonparametric tests as specified in Question \autoref{q:one} for
+this analysis. 
+
+Due to the nature of the questions surrounding the analysis, not in the
+hypothesis testing but in further questions the one-sided Kolmogorov-Smirnov
+test is of greater overall use than the Mann-Whitney U test because it allows us
+to make stronger claims of the nature of the two distributions, that one is
+skewed to the left or right of each other if the overall shape of the
+distributions are similar.
 
 \begin{question}
   What results did you get from this statistical test? These should include the
   following numerical values: p-values, as well as the means for each of the two
   samples under test.
+  \label{q:test-results}
 \end{question}
 
-The results of the two non-parametric tests were as follows:
+The results of the two nonparametric tests were as follows:
 
 \begin{python1}
-  import scipy
-  p_KS = 'The p-value using the one sided Kolmogorov-Smirnov test is:'
-  p_MW = 'The p-value using the one sided Mann-Whitney test is:'
-  mean_WE = 'The mean ENTRIESn_hourly for the weekend is:'
-  mean_WD = 'The mean ENTRIESn_hourly for the weekday is:'
-  print(p_KS, scipy.stats.ks_2samp(weekends,weekdays)[1], \
-    '\n' + p_MW, scipy.stats.mannwhitneyu(weekends,weekdays)[1], \
-    '\n' + mean_WE, weekends.mean(), \
-    '\n' + mean_WD, weekdays.mean())
-  The p-value using the one sided Kolmogorov-Smirnov test is: 5.24053009252e-184 
-  The p-value using the one sided Mann-Whitney test is: 5.78038940566e-213 
-  The mean ENTRIESn_hourly for the weekend is: 1207.45652352 
-  The mean ENTRIESn_hourly for the weekday is: 2158.04273055
+rain = df[df.rain == 0]['ENTRIESn_hourly']
+norain = df[df.rain == 1]['ENTRIESn_hourly']
+p_KS = 'The p-value using the one sided Kolmogorov-Smirnov test is:'
+p_MW = 'The p-value using the one sided Mann-Whitney test is:'
+mean_rainy = 'The mean ENTRIESn_hourly for rainy days is:'
+mean_norain = 'The mean ENTRIESn_hourly for non-rain days is:'
+print(p_KS, scipy.stats.ks_2samp(rainy,norain)[1], \
+      '\n' + p_MW, scipy.stats.mannwhitneyu(rainy,norain)[1], \
+      '\n' + mean_rainy, rainy.mean(), \
+      '\n' + mean_norain, norain.mean())
 \end{python1}
+\begin{verbatim}
+The p-value using the one sided Kolmogorov-Smirnov test is: 1.42662617869e-05 
+The p-value using the one sided Mann-Whitney test is: 2.74106957124e-06 
+The mean ENTRIESn_hourly for rainy days is: 2028.19603547 
+The mean ENTRIESn_hourly for non-rain days is: 1845.53943866
+\end{verbatim}
 
+As a two sided test is being performed, that is a test of whether the data comes
+from the same distribution, and not that one is greater or less than another the
+Mann-Whitney, a one sided test, should be multiplied by two to get the proper two
+sided $p$-value.   
 
 \begin{question}
   What is the significance and interpretation of these results?
 \end{question}
-
-The p-values, and means for each test strongly indicate that $H_0$ should be rejected
-in favor of $H_A$, and the Mann-Whitney due to its sidedness shows us that we
-can expect the weekends distribution to likely have a larger mean, although this
-will be discussed more thoroughly in two questions.
+Both tests indicate with $p$-values less than one in a ten-thousand that $H_0$
+should be rejected in favor of $H_A$ using the criteria in
+\autoref{eq:p-critical-value} of $p = 0.05$, and the Mann-Whitney due to its
+sidedness shows us that we can expect the rainy distribution to be shifted to
+the left and have a larger mean if the distributions are roughly the same.
+Calculating the means independently confirmed that the rainy days had a
+significantly larger ridership than non-rainy days at that, $2,028.19603547$ to
+$1,845.53943866$ on average.
 \section{Linear Regression}
 
 \begin{question}
@@ -655,21 +692,78 @@ construct this visualization \cite{Stackoverflow-pandas-savefig},
     rainy or non-rainy days.  There is a drastic dip in subway usage during the
     weekends, more rain fell on Wednesday by far then any other day, and there are
     significantly more passengers that ride the subway on Tuesday than any other
-  weekday.}
+  day of the week.}
 \label{fig:bar-days-of-week-rainy}
 \end{figure}
 \section{Conclusion}
 Please address the following questions in detail. Your answers should be 1-2
 paragraphs long.
+
 \begin{question}
  From your analysis and interpretation of the data, do more people ride
  the NYC subway when it is raining or when it is not raining?
 \end{question}
+The question in a sense needs to be refined.  The average
+\verb|ENTRIESn_hourly| is one method for measuring if more riders ride when it
+rains.  If this is the metric used for answering this question then indeed the
+average, $\bar{x}_{rain} = 2028.19603547$, is greater than the average hourly
+ridership when it's not raining, $\bar{x}_{norain} = 1845.53943866$.  This holds
+true even if the largest, $2\%$ on the right hand side, outliers are removed,
+with a mean of $1701.10986905$ and $1551.04237393$ for the remaining rainy and
+non-rainy data.  Not just the means alone provide support for this analysis, but
+indeed the one-sided Kolmogorov-Smirnov analyzed in
+\autoref{q:test-applicability} combined with the distributions having a very
+similar form as shown in the descriptive histogram in
+\autoref{fig:histo-entries_hourly-prob-set}.  As the distributions are similarly
+shaped but the rainy days has a greater mean, as well as a small but positive
+value for the Kolmogorov-Smirnov $D$ value which means the distributions are
+potentially from a similar distribution implies that using the average
+\verb|ENTRIESn_hourly| as the metric it must be concluded that more people ride
+the NYC subway when it's raining.
+
+Alternatively a metric that is equally reasonable to use to answer this question
+would be the overall amount of ridership for rainy and non-rainy days.  As there
+are far fewer rainy days in May and the two distributions despite the slightly
+higher mean for rainy days are in actuality very close, please see the
+\autoref{fig:histo-entries_hourly} for confirmation of this assertion, there are
+simply more riders during non-rainy days, as during rainy, $19,440,259$ and
+$61,020,916$ for rainy and non-rainy days respectfully, or more than three times
+the amount of riders for non-rainy days as rainy.  Please see
+\autoref{fig:bar-days-of-week-rainy} as confirmation to this, note how the red
+part of the bar the non-rainy portion is except for Wednesday much greater than
+the rainy, or blue section.  So that using this metric more people ride the
+subway on non-rainy days.
 
 \begin{question}
   What analyses lead you to this conclusion? You should use results from both
   your statistical tests and your linear regression to support your analysis.
 \end{question}
+
+From the two metrics above it really matters what question is actually being
+asked.  If hourly ridership, that is the rate of ridership, is what we are
+defining as more people, which for many problems is a good definition then more
+people ride when it's rainy.  If on the other hand we care about the total
+number of riders longitudinally over the month of May then by far, by over three
+times the riders, non-rainy days clearly is greater than rainy days.  
+
+If nothing else what can be concluded from the linear regression is that we
+don't know enough yet to make very accurate predictions.  As the highest
+$R^2$ value obtained was $0.49$, see \autoref{eq:r-squared-best}, this implies
+that the best predictions for \verb|ENTRIESn_hourly| using a linear model is
+globally useful but not a particularly strong statistic on its own.  That being
+the case what is of interest to answering this question is that the
+$\theta_{rain}$ weight isn't particularly high, in fact it's in terms of
+absolute value the penultimate weight, at $39.0$, where the maximum value was
+$8871.15668632$ for Wind speed which seems to be a rather odd variable to have
+such a profound effect on \verb|ENTRIESn_hourly|, note that normalizing the
+$\theta$ values which for this comparison is a more appropriate comparison
+doesn't change things very much.  As an indication of how
+relatively little rain appears to play a role in \verb|ENTRIESn_hourly| we can
+look to \autoref{fig:bar-days-of-week-rainy}.  Note that while Wednesday has
+more rain by a factor of more than two than any other day, and for many days
+many times over this amount, the overall \verb|ENTRIESn_hourly| for Wednesday is
+almost the same as for Monday, Thursday, and Friday, all of which also have varying
+amounts of rain, although not as apparent as Wednesday.
 
 \section{Reflection}
 Please address the following questions in detail. Your answers should be 1-2
@@ -683,11 +777,19 @@ including:
   \item Analysis, such as the linear regression model or statistical test.
 \end{itemize}
 \end{question}
-
-\begin{question}
-  (Optional) Do you have any other insight about the dataset that you would like
-  to share with us?
-\end{question}
+As discussed above the $R^2$ value isn't very high to make general predictions
+surrounding NYC ridership.  Either there are more variables that need to be
+taken into account or the real NYC subway ridership must be modeled using
+nonlinear regression, which is beyond the scope of this project.  One must keep
+in mind that the data analyzed was just one month, May, out of one year, 2011.
+In order to make accurate predictions either about the rest of the year or about
+following years simply more data from different months and years would be
+necessary.  The Kolmogrov-Smirnov test is useful in describing the differences
+between rainy and non-rainy days however the $D$ value was small $\approx 0.02$ which is why
+another nonparametric test was run with it the Mann-Whitney U test, because
+otherwise the $H_0$ shouldn't not be discarded, see
+\cite{Understanding-Kolmogorov-Smirnov}.
+ 
 %\printbibliography[keyword=statistics , title={Statistics references}]
 %\printbibliography[keyword=Matplotlib , title={Matplotlib references}]
 %\printbibliography[keyword=SciPy , title={SciPy references}]
@@ -944,7 +1046,7 @@ def reformat_subway_dates(date):
 % Shapiro-Wilk Test
 % w,p = scipy.stats.shapiro(data)
 
-% non-parametric test - stat test doesn't assume data is drawn from any
+% nonparametric test - stat test doesn't assume data is drawn from any
 % particular underlying prob. distrobution.   example being Mann-Whitney u test:
 % 
 % u,p = scipy.stats.mannwhitney(x,y)
@@ -1232,7 +1334,7 @@ Which produces a very colorful but barely acceptable graph:
 \printbibliography[keyword=SQL , title={SQL references}]
 \printbibliography[keyword=SciPy , title={SciPy references}]
 \printbibliography[keyword=Udacity , title={Udacity references}]
-\printbibliography[keyword=ggplot , title={ggplot references}]
+\printbibliography[keyword=ggplot , title={GGplot references}]
 \printbibliography[keyword=machine.learning, title={Machine Learning references}]
 \printbibliography[keyword=other , title={other references}]
 \printbibliography[keyword=statistics , title={Statistics references}]
