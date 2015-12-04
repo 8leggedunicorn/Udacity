@@ -1,7 +1,7 @@
 ## To Udacity Staff
   * This is a repository for the old P2 project: Analyze the NYC Subway Dataset.
   * The PDF file 'p2_analyze_the_NYC_sd.pdf' is the completed project.
-  * There was a corruption with the BibTex database at roughly 3:33PM CST December 4th, if you clone the project earlier than this please update.
+  * There was a corruption with the BibTex database at roughly 3:33PM CST December 4th, if you cloned the project earlier please update.
 
 ## Build from Source
 
