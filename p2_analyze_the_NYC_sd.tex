@@ -259,19 +259,24 @@ distributions are similar.
 The results of the two nonparametric tests were as follows:
 
 \begin{python1}
-rain = df[df.rain == 0]['ENTRIESn_hourly']
-norain = df[df.rain == 1]['ENTRIESn_hourly']
+rain = df[df.rain == 1]['ENTRIESn_hourly']
+norain = df[df.rain == 0]['ENTRIESn_hourly']
+ks_stat = scipy.stats.ks_2samp(rainy,norain)
 p_KS = 'The p-value using the one sided Kolmogorov-Smirnov test is:'
+D_KW = 'The D-value using the one sided Kolmogorov-Smirnov test is:'
 p_MW = 'The p-value using the one sided Mann-Whitney test is:'
 mean_rainy = 'The mean ENTRIESn_hourly for rainy days is:'
 mean_norain = 'The mean ENTRIESn_hourly for non-rain days is:'
-print(p_KS, scipy.stats.ks_2samp(rainy,norain)[1], \
+
+print(p_KS, ks_stat[1], \
+      '\n' + D_KW, ks_stat[0], \
       '\n' + p_MW, scipy.stats.mannwhitneyu(rainy,norain)[1], \
       '\n' + mean_rainy, rainy.mean(), \
       '\n' + mean_norain, norain.mean())
 \end{python1}
 \begin{verbatim}
 The p-value using the one sided Kolmogorov-Smirnov test is: 1.42662617869e-05 
+The D-value using the one sided Kolmogorov-Smirnov test is: 0.0281986431588 
 The p-value using the one sided Mann-Whitney test is: 2.74106957124e-06 
 The mean ENTRIESn_hourly for rainy days is: 2028.19603547 
 The mean ENTRIESn_hourly for non-rain days is: 1845.53943866
@@ -703,69 +708,52 @@ paragraphs long.
  From your analysis and interpretation of the data, do more people ride
  the NYC subway when it is raining or when it is not raining?
 \end{question}
-The question in a sense needs to be refined.  The average
-\verb|ENTRIESn_hourly| is one method for measuring if more riders ride when it
-rains.  If this is the metric used for answering this question then indeed the
-average, $\bar{x}_{rain} = 2028.19603547$, is greater than the average hourly
-ridership when it's not raining, $\bar{x}_{norain} = 1845.53943866$.  This holds
-true even if the largest, $2\%$ on the right hand side, outliers are removed,
-with a mean of $1701.10986905$ and $1551.04237393$ for the remaining rainy and
-non-rainy data.  Not just the means alone provide support for this analysis, but
-indeed the one-sided Kolmogorov-Smirnov analyzed in
-\autoref{q:test-applicability} combined with the distributions having a very
-similar form as shown in the descriptive histogram in
-\autoref{fig:histo-entries_hourly-prob-set}.  As the distributions are similarly
-shaped but the rainy days has a greater mean, as well as a small but positive
-value for the Kolmogorov-Smirnov $D$ value which means the distributions are
-potentially from a similar distribution implies that using the average
-\verb|ENTRIESn_hourly| as the metric it must be concluded that more people ride
-the NYC subway when it's raining.
 
-Alternatively a metric that is equally reasonable to use to answer this question
-would be the overall amount of ridership for rainy and non-rainy days.  As there
-are far fewer rainy days in May and the two distributions despite the slightly
-higher mean for rainy days are in actuality very close, please see the
-\autoref{fig:histo-entries_hourly} for confirmation of this assertion, there are
-simply more riders during non-rainy days, as during rainy, $19,440,259$ and
-$61,020,916$ for rainy and non-rainy days respectfully, or more than three times
-the amount of riders for non-rainy days as rainy.  Please see
-\autoref{fig:bar-days-of-week-rainy} as confirmation to this, note how the red
-part of the bar the non-rainy portion is except for Wednesday much greater than
-the rainy, or blue section.  So that using this metric more people ride the
-subway on non-rainy days.
+Yes, on average the hourly ridership for the NYC subway during rainy periods is
+greater than when it's not raining.  That is the distribution of
+\verb|ENTRIESn_hourly| has a greater mean, but as we can observe in
+\autoref{fig:histo-entries_hourly} from a little bit of descriptive statistics
+we can also see that the two distributions are very similarly shaped,
+monotonically decreasing distributions, with a single maximum at the very left
+of the distributions.  That is these distributions share quite a lot in common
+but rain appears to have a small but significant positive correlation with
+ridership. The next question will go further into the proof for this claim.
 
 \begin{question}
   What analyses lead you to this conclusion? You should use results from both
   your statistical tests and your linear regression to support your analysis.
 \end{question}
 
-From the two metrics above it really matters what question is actually being
-asked.  If hourly ridership, that is the rate of ridership, is what we are
-defining as more people, which for many problems is a good definition then more
-people ride when it's rainy.  If on the other hand we care about the total
-number of riders longitudinally over the month of May then by far, by over three
-times the riders, non-rainy days clearly is greater than rainy days.  
+As stated above there is multiple evidence that there is an increase in
+\verb|ENTRIESn_hourly| during times of rain. The average \verb|ENTRIESn_hourly|
+is a simple metric for measuring if more riders ride when it rains.  We find
+indeed that the average, $\bar{x}_{rain} = 2028.19603547$, is greater and
+signficantly, by about ten percent, than the average hourly ridership when it's
+not raining, $\bar{x}_{norain} = 1845.53943866$.  This holds true even if the
+largest, $2\%$ on the right hand side, outliers are removed, with a mean of
+$1701.10986905$ and $1551.04237393$, again at roughly $10\%$ more, for the
+remaining rainy and non-rainy data.  Not just the means alone provide support
+for this analysis however but indeed the one-sided Kolmogorov-Smirnov analyzed
+in \autoref{q:test-applicability} which has quite a low $p = 1.42662617869e-5$
+value, much lower than the decision rule determined prior to testing of $.05$.
+While this will be discussed later the low $p$ value came with a very low $D$
+statistic of $0.028$. Note the $D$ statistic is the maximum distance between the
+two cumulative distribution functions, for rainy and non-rainy days.  So a low
+value implies as one would suspect from the similarity of the histograms that
+the distributions are very similar.  
 
-If nothing else what can be concluded from the linear regression is that we
-don't know enough yet to make very accurate predictions.  As the highest
-$R^2$ value obtained was $0.49$, see \autoref{eq:r-squared-best}, this implies
-that the best predictions for \verb|ENTRIESn_hourly| using a linear model is
-globally useful but not a particularly strong statistic on its own.  That being
-the case what is of interest to answering this question is that the
-$\theta_{rain}$ weight isn't particularly high, in fact it's in terms of
-absolute value the penultimate weight, at $39.0$, where the maximum value was
-$8871.15668632$ for Wind speed which seems to be a rather odd variable to have
-such a profound effect on \verb|ENTRIESn_hourly|, note that normalizing the
-$\theta$ values which for this comparison is a more appropriate comparison
-doesn't change things very much.  As an indication of how
-relatively little rain appears to play a role in \verb|ENTRIESn_hourly| we can
-look to \autoref{fig:bar-days-of-week-rainy}.  Note that while Wednesday has
-more rain by a factor of more than two than any other day, and for many days
-many times over this amount, the overall \verb|ENTRIESn_hourly| for Wednesday is
-almost the same as for Monday, Thursday, and Friday, all of which also have varying
-amounts of rain, although not as apparent as Wednesday.
+The linear regression results indicate that there is a small but positive
+correlation between rain and \verb|ENTRIESn_hourly|, $\theta_{rain} =
+39.01877468$ which is small relative to the other weights but is a positive
+value, please see the potential issues with the size of $\theta_{rain}$ in the
+reflection section \autoref{sec:reflection}.  By itself this is not 
+particularly strong evidence that rain correlates positively with
+$\verb|ENTRIESn_hourly|$ however it is a useful piece of evidence all of which
+supports the claim that indeed rain does positively correlate with a greater
+value of \verb|ENTRIESn_hourly|.
 
 \section{Reflection}
+\label{sec:reflection}
 Please address the following questions in detail. Your answers should be 1-2
 paragraphs long.
 
@@ -785,11 +773,35 @@ in mind that the data analyzed was just one month, May, out of one year, 2011.
 In order to make accurate predictions either about the rest of the year or about
 following years simply more data from different months and years would be
 necessary.  The Kolmogrov-Smirnov test is useful in describing the differences
-between rainy and non-rainy days however the $D$ value was small $\approx 0.02$ which is why
-another nonparametric test was run with it the Mann-Whitney U test, because
-otherwise the $H_0$ shouldn't not be discarded, see
+between rainy and non-rainy days however the $D$ value was small $\approx 0.03$
+which is why another nonparametric test was run with it the Mann-Whitney U test,
+because otherwise the $H_0$ shouldn't not be discarded, see
 \cite{Understanding-Kolmogorov-Smirnov}.
  
+If nothing else what can be concluded from the linear regression is that we
+don't know enough yet to make very accurate predictions.  As the highest
+$R^2$ value obtained was $0.49$, see \autoref{eq:r-squared-best}, this implies
+that the best predictions for \verb|ENTRIESn_hourly| using a linear model is
+globally useful but not a particularly strong statistic on its own.  That being
+the case what is of interest to answering this question is that
+$\theta_{rain}$ is positive and that an $R^2$ value of $0.49$ is great enough
+that maybe not in itself but with the other available statistical tests it
+definitely supports the claim that the hourly ridership for the NYC subway is
+greater when it rains than when it doesn't.
+
+Note $\theta_{rain}$ isn't particularly large, in fact it's in terms of
+absolute value the penultimate weight, at $39.0$, where the maximum value was
+$8871.15668632$ for Wind speed which seems to be a rather odd variable to have
+such a profound effect on \verb|ENTRIESn_hourly|, note that normalizing the
+$\theta$ values which for this comparison is a more appropriate comparison
+doesn't change things very much.  As an indication of how
+relatively little rain appears to play a role in \verb|ENTRIESn_hourly| we can
+look to \autoref{fig:bar-days-of-week-rainy}.  Note that while Wednesday has
+more rain by a factor of more than two than any other day, and for many days
+many times over this amount, the overall \verb|ENTRIESn_hourly| for Wednesday is
+almost the same as for Monday, Thursday, and Friday, all of which also have varying
+amounts of rain, although not as apparent as Wednesday.
+
 %\printbibliography[keyword=statistics , title={Statistics references}]
 %\printbibliography[keyword=Matplotlib , title={Matplotlib references}]
 %\printbibliography[keyword=SciPy , title={SciPy references}]
@@ -1214,50 +1226,84 @@ refined tool in R:
 \begin{python1}
 from pandas import *
 from ggplot import *
+import pandas as pd
 
-def plot_weather_data(turnstile_weather):
-    
-    hour_mean = turnstile_weather.groupby('Hour', as_index=False).mean()
-    hour_median = turnstile_weather.groupby('Hour', as_index=False).median()
-    title = "Entries per hour from the 1st to the 30th of May 2011 "
-    xlable = "Hour"
-    ylable = "Entries per hour"
+ny_subway_data = \
+    "./data/data/turnstile_data_master_with_weather.csv"
+df = read_csv(ny_subway_data)
+hour_ens = df[['Hour','ENTRIESn_hourly']]
 
-    plot = ggplot(aes(x='Hour', y='ENTRIESn_hourly'), data=turnstile_weather) + \
-    geom_point(aes(x='Hour', y= 'ENTRIESn_hourly', size=100, alpha=0.1), color='steelblue') + \
-    geom_point(color='yellow', data=hour_mean) + \
-    geom_point(color='black', data=hour_median) + \
-    scale_color_gradient2() + \
-    xlab(xlable) + ylab(ylable) + ggtitle(title) + \
-    ylim(0,4000) + xlim(-.3,24)
-    
-    return plot
+hour_rain = df[ df['rain'] == 1 ]
+hour_rain_mean = hour_rain[['Hour','ENTRIESn_hourly']]
+hour_rain_mean = hour_rain_mean.groupby('Hour', as_index=False).mean()
+hour_rain_mean.rename(
+    columns = {'ENTRIESn_hourly' : 'Rain_mean' }, 
+    inplace = True
+)
+
+hour_norain = df[df['rain'] == 0 ]
+hour_norain_mean = hour_norain[['Hour','ENTRIESn_hourly']]
+hour_norain_mean = hour_norain_mean.groupby('Hour', as_index=False).mean()
+hour_norain_mean.rename(
+    columns = {'ENTRIESn_hourly' : 'No_Rain_mean' }, 
+    inplace = True
+)
+
+hour_mean = hour_ens.groupby('Hour', as_index=False).mean();
+hour_mean.rename(
+    columns = {'ENTRIESn_hourly' : 'Total_mean' },
+    inplace = True
+)
+
+title = "Entries per hour from the 1st to the 31st of May 2011 "
+xlable = "Hour"
+ylable = "Entries per hour"
+
+means = pd.merge(hour_mean, hour_norain_mean, on='Hour')
+means = pd.merge(means, hour_rain_mean, on='Hour')
+print(type(means))
+means_mlt = pd.melt(means,id_vars=['Hour'])
+means_mlt = means_mlt.rename(
+    columns = {'variable': 'Means', 'value' : 'ENTRIES_hourly'}
+)
+
+gg = ggplot(aes(x='Hour', y='ENTRIES_hourly',color='Means'), data=means_mlt) + \
+    geom_line(
+        size= 7.0,
+        alpha=0.75
+    ) + \
+    xlab(xlable) + ylab(ylable) + ggtitle(title)
+
+ggsave(gg,'entries_per_hour.png')
 \end{python1}
 
-Where I was unable to associate a legend but the output is as follows:
+The first visualization \autoref{fig:line-graph-hourly-ridership} is a line plot
+of the mean averages for rain, no rain, and the total data.  First fundamentally
+the graph shows that the averages for rain and no-rain are extremely similar.
+This is as expected noting the similarities of the distributions for rain and
+non-rain days observed from the histograms in
+\autoref{fig:histo-entries_hourly}.  If one looks closely, however one can see
+that of the four local maxima three of them at 8AM, 12PM, and 8PM have the rainy
+days with a slightly greater value, the green tops the red at those points, and
+only at 4PM the no-rain average is greater.
 
 \begin{figure}[ht]
   \centering
   \includegraphics[width=\textwidth]{entries_per_hour.png}
-  \caption{Each semi-transparent dot represents a point of data graphed for each
-    hour in respect to the number of entries per hour rate.  All outliers
-    greater than $4,000$  were left out of the plot in order to provide a more
-    meaningful view of the population.  The average and median values are
-    represented by the yellow and black dots respectively, and use all values
-    including above the $4,000$ level.  Note how even here most of the average
-    values are much below $500$ and that there are at least two distinct peaks
-  at 12PM and 8PM.}
-  \label{fig:bar-graph-ccs-vs-ics-times}
+  \caption{The visualization suffers from the fact that the average hourly
+    ridership for the rain and non-rain data are very similar, which means that
+    only one line is easily visible most of the time.  However three of the four
+    local maxima each show rain, the green color, is decidedly greater at these
+  points.}
+  \label{fig:line-graph-hourly-ridership}
 \end{figure}
-
 
 \begin{problem}
   Visualization II
 \end{problem}
 
-I decided to just do a variation on the same theme as the previous
-visualization.  This time, however, I've taken the top 6 stations in respect to
-the total number of colors needed for representation and plotted their data with
+In the second visualization I've taken the top 6 stations in respect to the
+total number of colors needed for representation and plotted their data with
 respect to the hours.  What is of note is that it appears many stations are
 often times nearly unused for several hours
 
@@ -1319,7 +1365,8 @@ def plot_weather_data(turnstile_weather):
 \begin{figure}[ht]
   \centering
   \includegraphics[width=\textwidth]{high_unit_per_hour.png}
-  \caption{This is a graph per hour of the entries found for the top 6 stations.
+  %\includegraphics{high_unit_per_hour.png}
+  \caption{This is a graph per hour of the ridership for the top 6 stations.
   Note the low values indicate times when a given station isn't being used.
 This seems to imply there might be a possibility of increasing the efficiency of
 these stations.}
