@@ -1,0 +1,642 @@
+\documentclass{article}
+    \usepackage{graphicx} % Used to insert images
+    \usepackage{adjustbox} % Used to constrain images to a maximum size 
+    %\usepackage{color} % Allow colors to be defined
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{listings}
+    \usepackage{setspace}
+    \usepackage{float}
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    %\usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage[T1]{fontenc}
+    \usepackage{newtxtext,newtxmath}
+    \usepackage[utf8]{inputenc} % Allow utf-8 characters in the tex document
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range 
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{tikz}
+    \usepackage{pgfplots}
+    \usepackage[]{ulem}
+    \pgfplotsset{compat=newest}
+    \usepackage{url}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage{ulem} % ulem is needed to support strikethroughs (\sout)
+    \usepackage{titlesec}
+    \titleformat{\section}{\normalfont\Large\bfseries}{Question {\thesection}: }{1em}{}
+    \usepackage[
+      autocite=inline, 
+      backend=biber,
+      labeldate=true, 
+      refsegment=section,
+      uniquename=full,
+      uniquelist=true]
+    {biblatex}
+    \usepackage{hyperref}
+    \renewcommand{\sectionautorefname}{\S}
+    \addbibresource{udacity.bib}
+    \definecolor{orange}{cmyk}{0,0.4,0.8,0.2}
+    \definecolor{darkorange}{rgb}{.71,0.21,0.01}
+    \definecolor{darkgreen}{rgb}{.12,.54,.11}
+    \definecolor{myteal}{rgb}{.26, .44, .56}
+    \definecolor{gray}{gray}{0.45}
+    \definecolor{lightgray}{gray}{.95}
+    \definecolor{mediumgray}{gray}{.8}
+    \definecolor{inputbackground}{rgb}{.95, .95, .85}
+    \definecolor{outputbackground}{rgb}{.95, .95, .95}
+    \definecolor{traceback}{rgb}{1, .95, .95}
+    % ansi colors
+    \definecolor{red}{rgb}{.6,0,0}
+    \definecolor{green}{rgb}{0,.65,0}
+    \definecolor{brown}{rgb}{0.6,0.6,0}
+    \definecolor{blue}{rgb}{0,.145,.698}
+    \definecolor{purple}{rgb}{.698,.145,.698}
+    \definecolor{cyan}{rgb}{0,.698,.698}
+    \definecolor{lightgray}{gray}{0.5}
+    
+    % bright ansi colors
+    \definecolor{darkgray}{gray}{0.25}
+    \definecolor{lightred}{rgb}{1.0,0.39,0.28}
+    \definecolor{lightgreen}{rgb}{0.48,0.99,0.0}
+    \definecolor{lightblue}{rgb}{0.53,0.81,0.92}
+    \definecolor{lightpurple}{rgb}{0.87,0.63,0.87}
+    \definecolor{lightcyan}{rgb}{0.5,1.0,0.83}
+    
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatability definitions
+    \def\gt{>}
+    \def\lt{<}
+    % Document parameters
+    
+\title{Exploring the Stroop Effect using Python}
+\author{Yigal Weinstein}
+
+    % Pygments definitions
+    
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % Exact colors from NB
+    \definecolor{incolor}{rgb}{0.0, 0.0, 0.5}
+    \definecolor{outcolor}{rgb}{0.545, 0.0, 0.0}
+
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Slightly bigger margins than the latex defaults
+ \hypersetup{pdfauthor={Yigal Weinstein},
+            pdftitle={P1: Stroop Effect},
+            pdfsubject={data science, Udacity, MOOC},
+            pdfkeywords={data science, statistics, probability, machine learning},
+            %pdfpagelayout={TwoPageLeft}, % Displays two pages, odd-numbered pages to the left 
+            pdfcreator={PdfLaTeX},
+            bookmarks={true},            %  A set of Acrobat bookmarks are written
+            colorlinks={true},           %  Colors the text of links and anchors. 
+            anchorcolor={black},         %  Color for anchor text.
+            filecolor={cyan},            %  Color for URLs which open local files.
+            menucolor={red},             %  Color for Acrobat menu items.
+            runcolor={blue},              %  Color for run links (launch annotations).        
+            linkcolor={red!50!black},
+            citecolor={blue!50!black},
+            %urlcolor={blue!80!black}
+            breaklinks=true,  % so long urls are correctly broken across lines
+           }           
+ 
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+
+\newcommand{\sectiontitle}[2]{
+\section{#1}
+\vspace{-1em}
+\mbox{\begin{minipage}{5in}
+\textbf{
+  \uline{
+    #2
+  }}
+\end{minipage}
+}
+\vspace{1em}
+}
+
+\definecolor{Code}{rgb}{0,0,0}
+\definecolor{Decorators}{rgb}{0.5,0.5,0.5}
+\definecolor{Numbers}{rgb}{0.5,0,0}
+\definecolor{MatchingBrackets}{rgb}{0.25,0.5,0.5}
+\definecolor{Keywords}{rgb}{0,0,1}
+\definecolor{self}{rgb}{0,0,0}
+\definecolor{Strings}{rgb}{0,0.63,0}
+\definecolor{Comments}{rgb}{0,0.63,1}
+\definecolor{Backquotes}{rgb}{0,0,0}
+\definecolor{Classname}{rgb}{0,0,0}
+\definecolor{FunctionName}{rgb}{0,0,0}
+\definecolor{Operators}{rgb}{0,0,0}
+\definecolor{Background}{rgb}{0.98,0.98,0.98}
+
+\lstnewenvironment{python}[1][]{
+\lstset{
+numbers=left,
+numberstyle=\footnotesize,
+numbersep=1em,
+xleftmargin=1em,
+framextopmargin=2em,
+framexbottommargin=2em,
+showspaces=false,
+showtabs=false,
+showstringspaces=false,
+frame=l,
+tabsize=4,
+% Basic
+basicstyle=\ttfamily\small\setstretch{1},
+backgroundcolor=\color{Background},
+language=Python,
+% Comments
+commentstyle=\color{Comments}\slshape,
+% Strings
+stringstyle=\color{Strings},
+morecomment=[s][\color{Strings}]{"""}{"""},
+morecomment=[s][\color{Strings}]{'''}{'''},
+% keywords
+morekeywords={import,from,class,def,for,while,if,is,in,elif,else,not,and,or,print,break,continue,return,True,False,None,access,as,,del,except,exec,finally,global,import,lambda,pass,print,raise,try,assert},
+keywordstyle={\color{Keywords}\bfseries},
+% additional keywords
+morekeywords={[2]@invariant},
+keywordstyle={[2]\color{Decorators}\slshape},
+emph={self},
+emphstyle={\color{self}\slshape},
+%
+}}{}
+
+\begin{document}
+\maketitle
+\section*{Introduction}
+So the stage is set with the following description for the Stroop experiment:
+\begin{quote}
+In a Stroop task, participants are presented with a list of words, with
+each word displayed in a color of ink. The participant's task is to say
+out loud the color of the ink in which the word is printed. The task has
+two conditions: a congruent words condition, and an incongruent words
+condition. In the congruent words condition, the words being displayed
+are color words whose names match the colors in which they are printed:
+for example {\color{red} RED }, {\color{blue} BLUE }. In the incongruent words condition, the words
+fisplayed are color words whose names do not match the colors in which
+they are printed: for example { \color{yellow}PURPLE }, {\color{green} ORANGE}. In each case, we measure
+the time it takes to name the ink colors in equally-sized lists. Each
+participant will go through and record a time from each condition.
+\cite{Udacity-P1-Stroop}
+\end{quote}
+This project attempts to follow the outline provided in \cite{Udacity-P1-Stroop}
+and the project rubrick set forth in \cite{Udacity-P1-rubrick}.
+\sectiontitle{Identify variables in the experiment}
+{
+\label{sec:question1}
+What is our independent variable? What is our dependent variable?}
+  incongruency between the color of a word, and the semantic meaning of the
+  word.  As example the word {\color{red}`RED'} is a congruent example where the
+  word `red' has the color of its semantic meaning, i.e. the color it
+  represents, and {\color{green}`BLUE'} is an incongruent case where the word
+  `blue' which has the semantic meaning of the color blue is instead the color
+  green. Frome here on out the terms congruent color selection, CCS, and
+incongruent color selection, ICS, will be used to denote the two conditions the
+dependent variable may take that of a word representing a color being colored
+with or with a different color respectively.
+
+The dependent variable is the time, in seconds, it takes to read through an
+equal sized lists of CCS or ICS words.  
+\sectiontitle{Establish a hypothesis and statistical test}{\label{sec:question2}
+What is an appropriate set of hypotheses for this task? What kind of statistical
+test do you expect to perform? 
+Justify your choices.}
+
+The null hypothesis, \(H_0\) is the statement that the ICS task will take less
+or an equal amount of time to the CCS task. The alternative hypothesis, \(H_A\)
+is the statement that the mean population time to read an ICS list will be
+greater than an equally sized CCS list. The null and alternative hypothesis
+choice stems from a need to test quantatively the validity and extent of an
+already well respected phenomenon the Stroop effect. The Stroop effect being
+defined to mean that cognitive incongruences will lead to an increase in the
+reaction time of a task.\\ It is true that this single tailed objective may not
+provide insight if indeed the reaction time for ICS word lists take, on the
+average, less time to complete, however this is a test regarding the scope and
+veracity of the Stroop effect which has been shown in many previous quantative
+tests to have general validity. If indeed the ICS task takes less time it is
+enough that \(H_0\) should be kept to cause doubt regarding the validity of
+either the test or the Stroop effect.  That is due to the large body of work
+already done to test the effect if \(H_0\) is kept there is either something
+wrong with the experiment or the Stroop effect has either more limitations on
+generalizability than expected or there are indeed real issues with it's
+veracity. So to sum things up via a set of equations:
+
+\begin{align}
+  \label{eq:null_hypothesis}
+  H_0:\; \mu_{ICS} \le \mu_{CCS} \\
+  \label{eq:alternative_hypothesis}
+  H_A:\; \mu_{ICS} > \mu_{CCS}
+\end{align}
+As the two sets of data are correlated, the same subjects are used to take both
+the ICS and CCS tests, the proper test to use is a dependent t-test for paired
+samples.  Given the hypothesis devised above the single tail test will be used.
+
+\sectiontitle{Report descriptive statistics}{
+  \label{sec:question3}
+Report some descriptive statistics regarding this dataset.
+Include at least one measure of central tendency and at least one measure of variability.}
+
+In \autoref{fig:descriptive_data_describe} is printed the mean, sample standard deviation, minimum values,
+25th, 50th - median, 75th percentiles, and maximums for both the CCS
+and ICS samples, all values are in seconds. 
+\begin{figure}[ht]
+  \centering
+  \input{charts/data_describe}
+  \caption{The source code for the table may be found:
+    \href{https://github.com/8leggedunicorn/p1_stroop_effect/blob/master/p1_stroop_effect.py\#L1-L13}
+        {p1\_stroop\_effect.py}.
+      The above table was generated with help from official PANDAS API
+      documentation as follows:
+    \cite{PANDAS-csv}, \cite{PANDAS-to-latex}, \cite{PANDAS-describe-df}}
+  \label{fig:descriptive_data_describe}
+\end{figure}
+\begin{center}
+\end{center}
+To measure the central tendency consider the mean, and the median - which in this
+case is simply the 50th percentile. Notice the fact that for both CCS and ICS
+the median and mean are nearly identical, for the CCS case it's less than one
+third of a second difference, and for the ICS case the difference between these
+two measure of central tendency is only slightly greater than a second. This
+points to both distribution being evenly distributed around the mean. As we can
+see for nearly all percentiles, minimum and maximum, and mean values the CCS
+times are roughly two thirds of the value of the ICS times, and all times for
+every category are significantly longer for the ICS sample relative to the CCS.
+
+An indication of the relative spread can be observed by looking at the sample
+standard deviations. the ICS case is slightly more spread out than the CCS case
+\(4.797s\) to \(3.559s\) respectively, i.e slightly over a second more for the
+ICS sample. To gain a better descriptive understanding of the spread we can also
+look at the range, i.e.  \(R = x_{max} - x_{min}\) of the two samples:
+
+\begin{align*}
+R_{CCS} = x_{CCS,max} - x_{CCS,min} = 22.328000 - 8.630000 = 13.698\\
+R_{ICS} = x_{ICS,max} - x_{ICS,min} = 35.255000 - 15.687000 = 19.568
+\end{align*}
+
+From both the sample standard deviation and the range we can see that the spread
+of the ICS sample is greater both in terms of the range, i.e.~outliers, and of
+the sample standard deviation:
+
+\sectiontitle{Plot the data}
+{\label{sec:question4}
+Provide one or two visualizations that show the distribution of the sample data.
+Write one or two sentences noting what you observe about the plot or plots.}
+
+\autoref{fig:bar-graph-ccs-vs-ics-times} points to the same ideas described
+in the descriptive statistics presented in the previous section. There are no
+real outliers for the CCS case, which shows up in the difference in the standard
+deviations of the two samples above, and that the mean and median for the CCS
+case are very close together.  What is interesting to note, however is that the
+two greatest times for the ICS are from subjects who take no where near the
+longest for the CCS trial. Subject 20 having the second greatest ICS time isn't
+even to the right of the mean.  This graph also explicitly shows that each
+subject takes a greater ICS time than their CCS time, there being no exceptions.
+\begin{figure}[ht]
+  \centering
+  \includegraphics{figures/bar_graph.pdf}
+  \caption{Bar graph of the time to complete the CCS and ICS list for each
+    subject.  The subject is labled in order of their position in the original
+    data, however the data is ordered by CCS time, from least to greatest.  The
+    code for the plot can be found in
+    \href{https://github.com/8leggedunicorn/p1_stroop_effect/blob/master/p1_stroop_effect.py}{p1\_stroop\_effect.py}
+    and demos and documentation from the official Matplotlib website were used
+    to generate it, 
+    \cite{Matplotlib-bar}, 
+    \cite{Matplotlib-colors},
+    \cite{Matplotlib-legend-transparent}, 
+    \cite{Matplotlib-pdf},
+    \cite{Matplotlib-pyplot}, 
+    \cite{Python-comprehension}}
+  \label{fig:bar-graph-ccs-vs-ics-times}
+\end{figure}
+One might think naively especially in the case of the CCS descriptive
+statistics that both data sets show an evenly distributed nature, however
+looking at the two histogram graphs, \autoref{fig:ICS-histogram} and
+\autoref{fig:CCS-histogram}, it becomes very clear that both are heavily
+skewed to the left, with the two outliers on the right hand side for the ICS
+case increasing the standard deviation dramatically
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.75]{figures/histogram-ccs}
+  \caption{The graph above is a histogram of the CCS data.  Note how it is
+  skewed heavily to the left.  This is due to the two outliers with times
+  greater than $32s$.}
+  \label{fig:CCS-histogram}
+\end{figure}
+As the sample size is not too great, it doesn't even exceed the minimum rule of
+thumb of thirty, and as such the shape of the population distribution isn't
+implied in the obviously left skewed sample distributions for both CCS and ICS,
+nor is the Central Limit Theorem to be relied upon given the sample size.  So
+over generalizing is a bit too easy at this point, however even after removing
+the outliers in the ICS case, please see
+\autoref{fig:ICS-no-outliers-histogram}, it is difficult to come to any
+definitvie conclusion about the distribution - only that the times are greater
+than the CCS data set.
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.75]{figures/histogram-ics}
+  \caption{The graph above is a histogram of the ICS data.  Note how it is
+  skewed heavily to the left.  This is due to the two outliers with times
+  greater than $32s$.}
+  \label{fig:ICS-histogram}
+\end{figure}
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.75]{figures/histogram-ics-no-outliers}
+  \caption{The graph above is a histogram of the ICS data where the two
+  outliers whose times were greater than $32s$ have been removed.}
+  \label{fig:ICS-no-outliers-histogram}
+\end{figure}
+\sectiontitle{Perform the statistical test and interpret your results}{
+\label{sec:question5}
+Now, perform the statistical test and report your results.  What is your
+confidence level and your critical statistic value?  Do you reject the null
+hypothesis or fail to reject it?  Come to a conclusion in terms of the
+experiment task. Did the results match up with your expectations?} 
+
+The test to be performed is a \textit{t} Test for Correlated Groups.  That is a
+test where the subjects of both groups remain the same and it's the independent
+variable CCS/ICS tests that distinguish one set of data from the other.  For
+guidance concerning which test to apply I referenced the fine research methods
+book \cite{jackson2011research}.  As stated in \autoref{sec:question2} I believe
+both one and two sided tests can legitimately be argued for, however if this is
+a test regarding the Stroop effect only the one tailed test defined by the
+hypothesi discussed again in \autoref{sec:question2} i.e.
+\autoref{eq:null_hypothesis} and \autoref{eq:alternative_hypothesis} are
+reasonable.  Both \autoref{sec:question3} and \autoref{sec:question4} point to a
+statistically significant difference between the two data sets, and in this
+section the math is performed to show this, and quantatatively to what extent.  
+
+I have used the SciPy package to calculate the \text{t} value
+\cite{Scipy-ttest-rel}.  Below are the calculations as well as the results to
+this method:
+\begin{figure}[H]
+  \centering
+  \begin{python}
+    import pandas as pd
+    import numpy as np
+    import scipy as sp
+    import scipy.stats
+    from math import sqrt
+    stroopdata = pd.read_csv('stroopdata.csv')
+    ttest = scipy.stats.ttest_rel(stroopdata['Incongruent'],
+                                    stroopdata['Congruent'])
+    # As scipy.stats.ttest_rel calculates a two-tailed test to obtain the p value
+    # for the one-tailed test requires dividing this p value by 1/2, so for the
+    # one-tailed test:
+    print("(",ttest[0],",",ttest[1]*0.5,")")
+    ( 8.02070694411, 2.05150029286e-08 )
+  \end{python}
+  \caption{Calculation of the one-tail correlated \textit{t} test shows that the
+  the null hypothesis should be rejected.  That is $\mu_{ICS} > \mu_{CCS}$. For
+syntax highlighting, as I'm using {pdf\LaTeX}, I used additional assistance from
+\cite{LaTeX-listings-python}.}
+  \label{fig:reject-null-hypothesis}
+\end{figure}
+So to interpret the results.  First we are interested in the one-tail result.
+Note that as the \textit{t} Test assumes a symmetric distrobution the $p$ value of
+the one-tail test is simply half the value of the two tail test, while the
+\textit{t} remains unchanged.  So the first number, $8.02070694411,$ obtained in the last line of
+\autoref{fig:reject-null-hypothesis} is the \textit{t} value and the second of
+$2.05150029286e-08$ is the $p$ value for the one-tailed correlated
+\textit{t} Test.
+
+That is the population mean, $\mu_{ICS}$ for the ICS
+data set is greater than the $\mu_{CCS}$ ( $\mathit{t} = 8.020706944109957$ at
+$p = 2.05150029286e-08$ ), an exceedingly unlikely occurrence, roughly two in
+one-hundred million chance to occur if $\mu_{ICS}$ was in fact less than or
+equal to $\mu_{CCS}$.  Which means the test results points to $H_A$ being the
+only reasonably acceptable hypothesis, with almost no chance of a Type I
+error occurring. 
+
+The quantative results matched up well with the descriptive and inferential
+statistics discussed in sections \autoref{sec:question3} and
+\autoref{sec:question4}.  The degree to which the null hypothesis must be
+rejected after looking at the results of this test paint the stark difference
+between these two data sets.
+\sectiontitle{Digging deeper and extending the investigation}{
+\label{sec:question6}
+  What do you think is responsible for the effects observed?
+  Can you think of an alternative or similar task that would result in a similar
+  effect?  Some research about the problem will be helpful for thinking about these two questions!}
+
+There is a concise but equally inspired webpage that goes into the possible ways
+of viewing the Stroop effect, see \cite{Stroop-background}.  What follows I
+cannot take credit for and must rely on the previously cited reference.  They
+list three models explaining why the effect occurs: the automatic word
+recognition (AWR) model , speed of processing (SP) model, and a parallel
+distribued processing (PDP) model.  
+
+I will briefly describe these three models.  The AWR is the claim that humans
+are hard wired for language and in this case word recognition.  That is we are
+hard wired to process words in a certain manner, i.e. the meaning of a printed
+word takes prescedence over the color of the printed word.  The evidence for
+this model is due to the robust nature of the Stroop effect.  That the ICS
+sample always has a greater mean than the CCS sample, regardless of practice.
+That the use of color related words such as 'sky' or 'firetruck', to words that
+sound like color words such as 'wred' and 'bloo' all behave in accordance with
+the Stroop effect.  So the AWR model claims that in essence the Stroop effect is
+due to how humans process information.  That is we have a biological tendency to
+focus on, have a precedence for, semantic meaning over observable traits, like
+color.
+
+The SP model makes the claim that certain neural pathways are simply faster than
+others.  That the reading pathway is faster than the color processing pathway.
+As such it takes longer for the brain work out the conflicting messages and use
+the later arriving information regarding the color of the printed word over its
+semantic meaning.  This is a poor example but I will use it anyways.  Lightning
+to our eyes arrives faster than thunder to our ears.  This is due to the nature
+of the medium that the energy is passing through.  The metaphor breaks down
+quickly but it's an easy way of seeing the idea in practice.
+
+Finally the PDP model claims that it's not so much a matter of speed as in the
+SP model but a matter of the strengths of the cognitive pathways of each.  That
+is on the whole the pathway for reading is stronger and therefore takes
+presedence not because it arrives at the conscious decision making parts of our
+brain but because it makes more of an impact, so that in turn it requires more
+from us to focus in on the fainter observation of the color of the printed
+letters.
+
+The Wikipedia article on this subject \cite{Stroop-wikipedia}, is far more
+exhaustive in its description.  It discusses the possible biological basis of
+the phenomenon, and provides good research references.  Instead of parroting any
+further explication I will consider an experiment not in this article I thought
+would be interesting.
+
+While originally I thought up the experiement on my own a bit of searching found
+that research had naturally already pushed into this area
+\cite{Stroop-dyslexia}.  The only change to the normal Stroop effect would be to
+use experimental subjects all of whom had dyslexia, and a control of random but
+similarly aged readers.  It seems to me that likely the dyslexic would have an
+easier time saying the name of the color of a certain printed word over reading
+the word which if it occurred would violate the Stroop effect.  Studying the
+causes might hopefully shed light on why exactly the Stroop effect occurs, and
+provide more insight into dyslexia.  Oddly what the researchers found in the
+referenced study is however just the opposite to the one I naively 
+hypothesized.  Namely the children with dyslexia had an even more pronounced
+Stroop effect than normal readers in their age group.  
+
+What is obvious is that the continuous advances in technology should help in
+understanding what the basis is for the Stroop effect.  Another experiment is
+using a technology that isn't quite here but is a stone's throw away that of
+modern brain reading, or making correlations between uses of particular areas of
+the brain and our thoughts which in the last decade has really progressed
+immensly, see \cite{Brain-to-text} as an example.  Using this technology we
+would likely be able to see exactly where the extra time was coming from.  Then
+again if real mind reading becomes a reality in any practical sense it likely
+would have far greater reaching effects but it's something to look forward to.
+
+%%fakesection bibliography
+\printbibliography[keyword=statistics , title={Statistics references}]
+\printbibliography[keyword=Matplotlib , title={Matplotlib references}]
+\printbibliography[keyword=SciPy , title={SciPy references}]
+\printbibliography[keyword=PANDAS , title={PANDAS references}]
+\printbibliography[keyword=Udacity , title={Udacity references}]
+\printbibliography[keyword=LaTeX , title={{pdf\LaTeX}  references}]
+\printbibliography[keyword=other , title={other references}]
+\end{document}
